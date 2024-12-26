@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { MdCancel, MdDeleteForever, MdOutlineUnarchive } from "react-icons/md";
+import { MdCancel, MdOutlineUnarchive } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from '../Components/Navbar';
+import { addID } from '../Redux/Slice';
 
 const Dashboard = () => {
     const input = useRef(null)
@@ -8,18 +10,10 @@ const Dashboard = () => {
     const [images, setImages] = useState([]);
     const [selection, setSelection] = useState(false)
     const [areaSelector, setAreaSelector] = useState([])
-
     const [field, setField] = useState([])
 
-
-    const Delete = (e, id) => {
-        e.preventDefault();
-        const oldArray = [...field]
-        const newArray = oldArray.filter((a) => a.id != id)
-        console.log(newArray)
-        setField(newArray)
-
-    }
+    const dispatch = useDispatch()
+    const form = useSelector(state => state.form.Form)
 
 
     const selectImage = () => {
@@ -53,32 +47,24 @@ const Dashboard = () => {
         console.log("required", (e.target.naturalWidth / e.target.width) * e.nativeEvent.offsetX, (e.target.naturalHeight / e.target.height) * e.nativeEvent.offsetY)
         const xCordinate = Math.round((e.target.naturalWidth / e.target.width) * e.nativeEvent.offsetX)
         const ycordinate = Math.round((e.target.naturalHeight / e.target.height) * e.nativeEvent.offsetY)
+        const requiredID = new Date().getTime()
 
-        const id = field.length + 1
+
         if (!selection) {
-            const requiredID = areaSelector.length + 1
-
-            setAreaSelector([...areaSelector, {
+            const leftx = e.nativeEvent.offsetX
+            const topx = e.nativeEvent.offsetY
+            dispatch(addID(requiredID))
+            const newArea = [...areaSelector, {
                 id: requiredID,
-                top: 0,
-                left: 0,
+                top: topx,
+                left: leftx,
                 width: 0
-            }])
-            const left = e.nativeEvent.offsetX
-            const top = e.nativeEvent.offsetY
-
-            setAreaSelector(areaSelector.map((item) => {
-                if (item.id == requiredID) {
-                    return { ...item, top: top, left: left }
-                } else {
-                    return item
-                }
-            }))
+            }]
+            setAreaSelector(newArea)
             console.log(areaSelector)
-
             const newObj = [
                 ...field, {
-                    id: id,
+                    id: requiredID,
                     keyName: "",
                     Start: { "x1": xCordinate, "y1": ycordinate },
                     End: { "x2": 0, "y2": 0 },
@@ -86,35 +72,39 @@ const Dashboard = () => {
                 }]
 
             setField((state) => state = newObj)
-            console.log(field)
             setSelection(true)
         } else {
-            const width = e.nativeEvent.offsetX - areaSelector.left
+            console.log(form)
+            const newUpdate = areaSelector.map((item) => item.id == form ? { ...item, width: e.nativeEvent.offsetX - item.left } : item)
+            setAreaSelector(newUpdate)
+            console.log(areaSelector)
 
-
-            setAreaSelector(areaSelector.map((item) => {
-                if (item.id == areaSelector.length + 1) {
-                    return { ...item, width: width }
+            setField(field.map(item => {
+                if (item.id == form) {
+                    const newItem = { ...item }
+                    newItem.End.x2 = xCordinate
+                    newItem.End.y2 = ycordinate
+                    return newItem
                 } else {
                     return item
                 }
             }))
-            console.log(areaSelector)
-
-            const oldArray = [...field]
-            const id = field.length
-            const update = oldArray.find((a) => a.id == id)
-            console.log(id)
-            update.End.x2 = xCordinate
-            update.End.y2 = ycordinate
-            setField(oldArray)
             setSelection(false)
-            console.log(areaSelector)
 
         }
 
 
 
+
+    }
+    const delAreaSelector = (e) => {
+        const ID = e.target.id
+        setAreaSelector(areaSelector.filter(item => item.id != ID))
+        const filteredArray = field.filter(item => item.id != ID)
+        setField(filteredArray)
+        console.log(ID)
+        console.log(field.filter(item => item.id != ID))
+        console.log(areaSelector.filter(item => item.id != ID))
 
     }
 
@@ -164,10 +154,10 @@ const Dashboard = () => {
                                             />
 
                                         </div>
-                                        <button onClick={(e) => Delete(e, item.id)} className='flex m-1 border self-end items-center w-15 h-11 text-sm  p-2 justify-center rounded-lg text-blue-800'>
+                                        {/* <button onClick={(e) => Delete(e, item.id)} className='flex m-1 border self-end items-center w-15 h-11 text-sm  p-2 justify-center rounded-lg text-blue-800'>
                                             <MdDeleteForever />
 
-                                        </button>
+                                        </button> */}
                                     </div>
                                     <div className='flex mt-3'>
                                         <div className="flex w-1/2  m-1 items-center justify-center  bg-white pl-3 rounded-lg  p-1 outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-orange-300">
@@ -264,19 +254,20 @@ const Dashboard = () => {
 
                             <img src={images} alt="" onClick={imgCoordinates} className='cursor-crosshair drop-shadow-md z-0 ' />
 
-                            {areaSelector.length ?
-                                areaSelector.map((item, index) => <div key={index} style={{ transform: `translate(${item.left}px, ${item.top}px)`, height: 40, width: item.width }} className="flex absolute z-10  border border-blue-600 bg-blue-300 ">
+                            {
+                                areaSelector.length ?
+                                    areaSelector.map((item, index) => <div key={index} id={index}
+                                        style={{ transform: `translate(${item.left}px, ${item.top}px)`, width: item.width }}
+                                        className="flex   justify-between h-12 items-center absolute z-10  border border-blue-600 bg-blue-300 ">
 
-                                </div>
-                                )
+                                        <div className='flex text-base w-full justify-center'>{field[index].keyName}</div>
+                                        <div className='flex  w-4 self-start mb-3 h-min ' onClick={delAreaSelector}><MdCancel id={item.id} /></div>
 
 
-                                : <></>
+                                    </div>
+                                    )
+                                    : <></>
                             }
-
-
-
-
 
                         </div>
                     }
