@@ -3,17 +3,17 @@ import { MdAccountCircle, MdLogout } from "react-icons/md";
 
 const Navbar = () => {
     return (
-        <div className='flex bg-blue-500 h-max items-center justify-between w-full text-white '>
+        <div className='flex bg-blue-600 h-max items-center justify-between w-full text-white '>
 
             <div className='flex w-auto text-xl rounded-md text-center  font-semibold '>
                 <img src="/src/assets/new.png" alt="" className=' w-1/3 ' />
 
             </div>
 
-            <div className='flex items-center '>
-                <div className='flex'>
-                    <div className='p-2'>Home</div>
-                    <div className='p-2'>Downloads</div>
+            <div className='flex items-center font-bold'>
+                <div className='flex '>
+                    <div className='p-2 cursor-pointer	 '>Home</div>
+                    <div className='p-2 cursor-pointer	'>Downloads</div>
 
                 </div>
                 <div className='flex items-center  p-2 text-lg'>

@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { MdCancel, MdOutlineUnarchive } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import Axios from '../Axios/Axios';
+import InputBox from '../Components/InputBox';
 import Navbar from '../Components/Navbar';
 import { addID } from '../Redux/Slice';
 
@@ -40,7 +41,6 @@ const Dashboard = () => {
         const images = URL.createObjectURL(e.target.files[0]);
         setImages(images);
         setPImg(true)
-
     };
 
     const imgCoordinates = (e) => {
@@ -58,7 +58,8 @@ const Dashboard = () => {
                 id: requiredID,
                 top: topx,
                 left: leftx,
-                width: 0
+                width: 0,
+                height: 0
             }])
             console.log(areaSelector)
             setField([
@@ -72,10 +73,7 @@ const Dashboard = () => {
             console.log(field)
             setSelection(true)
         } else {
-            const newUpdate = areaSelector.map((item) => item.id == form ? { ...item, width: e.nativeEvent.offsetX - item.left } : item)
-            setAreaSelector(newUpdate)
-            console.log(areaSelector)
-            console.log(field)
+
 
 
             setField(field.map(item => {
@@ -88,12 +86,17 @@ const Dashboard = () => {
                     return item
                 }
             }))
+            field.map(Item => {
+                if (Item.id == form) {
+
+                    const newUpdate = areaSelector.map((item) => item.id == form ? { ...item, height: Item.End.y2 - Item.Start.y1, width: e.nativeEvent.offsetX - item.left } : item)
+                    setAreaSelector(newUpdate)
+
+                }
+            })
             setSelection(false)
 
         }
-
-
-
 
     }
     const delAreaSelector = (e) => {
@@ -113,8 +116,6 @@ const Dashboard = () => {
         const formData = new FormData(e.currentTarget);
         formData.append("location", JSON.stringify(field))
 
-
-
         Axios("test2/", "POST", formData).then((res) => {
             console.log("Call")
         })
@@ -125,83 +126,53 @@ const Dashboard = () => {
 
 
     return (
-        <div className='flex flex-col h-screen  w-full'>
+        <div className='flex flex-col h-screen  w-screen'>
 
             <Navbar />
 
 
-            <form onSubmit={SubmitForm} className='flex lg:flex-col bg-white-50 h-full justify-center items-center w-full' encType="multipart/form-data" >
+            <form onSubmit={SubmitForm} className='flex  bg-white-50 h-full  w-full' encType="multipart/form-data" >
 
                 <div className='flex flex-col h-full  w-1/4'>
 
-
-
-                    <div className='flex w-full h-3/4 flex-col p-2 overflow-y-auto '>
+                    <div className='flex w-full h-3/4 flex-col p-2 overflow-y-auto  '>
+                        <div className='border p-2 rounded-lg text-md font-bold'>Field's</div>
 
                         {
-                            field.map((item) =>
-                                <div key={item.id} className='flex mt-3    flex-col border rounded-xl p-2 w-full h-full   ' >
+                            field.map((item, index) =>
 
-                                    <div className='flex items-center'>
-                                        <div className="flex m-1 items-center justify-center w-full  bg-white  rounded-lg  p-1 outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-orange-300">
+                                <InputBox key={index} id={item.id} keyName={item.keyName} Startx1={item.Start.x1} Starty1={item.Start.y1}
+                                    Endx2={item.End.x2} Endy2={item.End.y2} handleChange={handleChange} />
 
-                                            <p className=" flex text-black self-start p-1 mt-1">Field</p>
-
-                                            <input
-                                                id={item.id}
-                                                type="text"
-                                                placeholder=""
-                                                value={item.keyName}
-                                                onChange={handleChange}
-                                                className="block  grow py-1.5 pl-1 pr-3 text-xl text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-
-                                            />
-
-                                        </div>
-
-                                    </div>
-                                    <div className='flex mt-3'>
-                                        <div className="flex w-1/2  m-1 items-center justify-center  bg-white pl-3 rounded-lg  p-1 outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-orange-300">
-
-                                            <p className="text-black self-start p-1 mt-1">X : {item.Start.x1}</p>
-
-
-                                        </div>
-                                        <div className="flex w-1/2 m-1 items-center justify-center  bg-white pl-3 rounded-lg  p-1 outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-orange-300">
-
-                                            <p className="text-black self-start p-1 mt-1">Y : {item.Start.y1}</p>
-
-
-                                        </div>
-                                    </div>
-                                    <div className='flex mt-3'>
-                                        <div className="flex w-1/2  m-1 items-center justify-center  bg-white pl-3 rounded-lg  p-1 outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-orange-300">
-
-                                            <p className="text-black self-start p-1 mt-1">X : {item.End.x2}</p>
-
-
-                                        </div>
-                                        <div className="flex w-1/2 m-1 items-center justify-center  bg-white pl-3 rounded-lg  p-1 outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-orange-300">
-
-                                            <p className="text-black self-start p-1 mt-1">Y : {item.End.y2}</p>
-
-                                        </div>
-                                    </div>
-
-                                </div>
                             )
                         }
 
                     </div>
 
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col border h-1/4 justify-between p-3  rounded-md  items-center'>
                         <input type="file"
                             name='csvFile'
                             placeholder='choose  .csv'
-                            className="flex self-center  mt-3 justify-center rounded-md bg-green-00 px-3 py-1.5 text-sm/6   font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            className="flex self-center
+                              mt-3 justify-center rounded-md bg-green-00 px-3 py-1.5 text-sm/6  
+                               font-semibold text-black focus-visible:outline focus-visible:outline-2
+                                focus-visible:outline-offset-2 focus-visible:outline-blue-600
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                            file:bg-blue-50 file:text-violet-500
+                                hover:file:bg-violet-100  
+                                "
+
+                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                         />
                         <input type='submit'
-                            className="flex self-center w-1/4  mt-4 justify-center rounded-md bg-green-00 px-3 py-1.5 text-sm/6 bg-blue-500  font-semibold text-white shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            className="flex self-center 
+                            w-1/4  mt-4 justify-center 
+                            rounded-md bg-green-00 px-3 
+                            py-1.5 text-sm/6 bg-blue-500  font-semibold text-white 
+                            shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 
+                                focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
                         />
 
@@ -211,27 +182,27 @@ const Dashboard = () => {
 
                 </div>
 
-                <div className='flex flex-col  items-center justify-center border h-full w-3/4 text-3xl' onClick={selectImage}>
+                <div className='flex flex-col bg-gray-50 items-center justify-center border h-full w-3/4 text-3xl' onClick={selectImage}>
                     <input name='thumbnail' hidden type="file" ref={input} onChange={handleImageChange} accept="image/png, image/jpg, image/jpeg" />
 
 
                     {
-                        !pImg ? <div className='flex border p-4 rounded-lg flex-col justify-center items-center '>
+                        !pImg ? <div className='flex p-4  rounded-lg justify-center items-center text-gray-400 '>
 
                             <div className='p-2'><MdOutlineUnarchive /></div>
-                            <div className='text-lg' >Select Thumbnail</div>
+                            <div className='text-2xl' >Select Thumbnail</div>
 
 
                         </div> : <div className="flex relative flex-col h-max w-4/5 z-0 ">
                             <div className='flex self-end z-0' onClick={(e) => setPImg(false)}><MdCancel /></div>
 
-                            <img src={images} alt="" onClick={imgCoordinates} className='cursor-crosshair drop-shadow-md z-0 ' />
+                            <img src={images} alt="" onClick={imgCoordinates} className='cursor-crosshair drop-shadow-md z-0 w-5/6 ' />
 
                             {
                                 areaSelector.length ?
                                     areaSelector.map((item, index) => <div key={index} id={index}
                                         style={{ transform: `translate(${item.left}px, ${item.top}px)`, width: item.width }}
-                                        className="flex   justify-between h-12 items-center absolute z-10  border border-blue-600 bg-blue-300 ">
+                                        className="flex   justify-between  items-center h-10 absolute z-10  border border-blue-600 bg-blue-300 ">
 
                                         <div className='flex text-base w-full justify-center'>{field[index].keyName}</div>
                                         <div className='flex  w-4 self-start h-max ' onClick={(e) => delAreaSelector(item.id)}><MdCancel /></div>

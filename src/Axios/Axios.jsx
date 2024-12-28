@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'https://10.21.96.199:8000/certifier',
+    baseURL: 'https://bc37-2409-40d2-6f-3838-ba71-378b-8b93-2650.ngrok-free.app/',
     timeout: 1000,
     headers: {
         'Content-Type': 'multipart/form-data'
@@ -12,7 +12,7 @@ const instance = axios.create({
 const Axios = async (apiName, method, dataObject) => {
 
     return await instance({
-        url: `/${apiName}`,
+        url: `${apiName}`,
         method: `${method}`,
         data: dataObject
 
