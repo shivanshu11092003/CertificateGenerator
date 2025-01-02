@@ -6,7 +6,7 @@ const Navbar = () => {
         <div className='flex bg-blue-600 h-max items-center justify-between w-full text-white '>
 
             <div className='flex w-auto text-xl rounded-md text-center  font-semibold '>
-                <img src="/src/assets/new.png" alt="" className=' w-1/3 ' />
+                <img src="/src/assets/new.png" alt="" className=' md:w-1/3 w-full ' />
 
             </div>
 

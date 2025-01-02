@@ -113,10 +113,17 @@ const Dashboard = () => {
     const SubmitForm = (e) => {
         e.preventDefault()
         console.log(e.target)
+        const data = [
+            { name: "Shivanshu" },
+            { name: "Nandini" },
+            { name: "Prince" },
+            { name: "Suhani" }
+        ]
         const formData = new FormData(e.currentTarget);
         formData.append("location", JSON.stringify(field))
+        formData.append("data", JSON.stringify(data))
 
-        Axios("test2/", "POST", formData).then((res) => {
+        Axios("create/", "POST", formData).then((res) => {
             console.log("Call")
         })
 
@@ -131,59 +138,10 @@ const Dashboard = () => {
             <Navbar />
 
 
-            <form onSubmit={SubmitForm} className='flex  bg-white-50 h-full  w-full' encType="multipart/form-data" >
+            <form onSubmit={SubmitForm} className='flex flex-col md:flex-row bg-white-50 h-full  w-full' encType="multipart/form-data" >
 
-                <div className='flex flex-col h-full  w-1/4'>
-
-                    <div className='flex w-full h-3/4 flex-col p-2 overflow-y-auto  '>
-                        <div className='border p-2 rounded-lg text-md font-bold'>Field's</div>
-
-                        {
-                            field.map((item, index) =>
-
-                                <InputBox key={index} id={item.id} keyName={item.keyName} Startx1={item.Start.x1} Starty1={item.Start.y1}
-                                    Endx2={item.End.x2} Endy2={item.End.y2} handleChange={handleChange} />
-
-                            )
-                        }
-
-                    </div>
-
-                    <div className='flex flex-col border h-1/4 justify-between p-3  rounded-md  items-center'>
-                        <input type="file"
-                            name='csvFile'
-                            placeholder='choose  .csv'
-                            className="flex self-center
-                              mt-3 justify-center rounded-md bg-green-00 px-3 py-1.5 text-sm/6  
-                               font-semibold text-black focus-visible:outline focus-visible:outline-2
-                                focus-visible:outline-offset-2 focus-visible:outline-blue-600
-                                file:mr-4 file:py-2 file:px-4
-                                file:rounded-full file:border-0
-                                file:text-sm file:font-semibold
-                            file:bg-blue-50 file:text-violet-500
-                                hover:file:bg-violet-100  
-                                "
-
-                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                        />
-                        <input type='submit'
-                            className="flex self-center 
-                            w-1/4  mt-4 justify-center 
-                            rounded-md bg-green-00 px-3 
-                            py-1.5 text-sm/6 bg-blue-500  font-semibold text-white 
-                            shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 
-                                focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-
-                        />
-
-                    </div>
-
-
-
-                </div>
-
-                <div className='flex flex-col bg-gray-50 items-center justify-center border h-full w-3/4 text-3xl' onClick={selectImage}>
-                    <input name='thumbnail' hidden type="file" ref={input} onChange={handleImageChange} accept="image/png, image/jpg, image/jpeg" />
+                <div className='flex flex-col bg-gray-50 items-center justify-center border h-full w-full md:w-3/4 text-3xl' onClick={selectImage}>
+                    <input name='image' hidden type="file" ref={input} onChange={handleImageChange} accept="image/png, image/jpg, image/jpeg" />
 
 
                     {
@@ -216,6 +174,57 @@ const Dashboard = () => {
                         </div>
                     }
                 </div>
+
+                <div className='flex flex-col h-full  w-full md:w-1/4'>
+
+                    <div className='flex w-full h-3/4 flex-col p-2 overflow-y-auto  '>
+                        <div className='border p-2 rounded-lg text-md font-bold'>Field's</div>
+
+                        {
+                            field.map((item, index) =>
+
+                                <InputBox key={index} id={item.id} keyName={item.keyName} Startx1={item.Start.x1} Starty1={item.Start.y1}
+                                    Endx2={item.End.x2} Endy2={item.End.y2} handleChange={handleChange} />
+
+                            )
+                        }
+
+                    </div>
+
+                    <div className='flex flex-col border h-full md:h-1/4 justify-between p-3  rounded-md  items-center'>
+                        <input type="file"
+
+                            placeholder='choose  .csv'
+                            className="flex self-center
+                              mt-3 justify-center rounded-md bg-green-00 px-3 py-1.5 text-sm/6  
+                               font-semibold text-black focus-visible:outline focus-visible:outline-2
+                                focus-visible:outline-offset-2 focus-visible:outline-blue-600
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                            file:bg-blue-50 file:text-violet-500
+                                hover:file:bg-violet-100  
+                                "
+
+                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                        />
+                        <input type='submit'
+                            className="flex self-center 
+                            w-1/4  mt-4 justify-center 
+                            rounded-md bg-green-00 px-3 
+                            py-1.5 text-sm/6 bg-blue-500  font-semibold text-white 
+                            shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 
+                                focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+
+                        />
+
+                    </div>
+
+
+
+                </div>
+
+
             </form>
 
         </div>

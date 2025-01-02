@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdOutlineMail, MdPassword } from "react-icons/md";
 
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { useNavigate } from 'react-router-dom';
 import Axios from '../Axios/Axios';
+import LoginInput from '../Components/LoginInput';
 
 
 
 const Login = () => {
+    const naviagte = useNavigate()
     const [form, setForm] = useState({
         email: '',
         password: ''
     })
+
+    useEffect(() => {
+        Axios("login/", "GET").then((res) => {
+            naviagte(res.data.route)
+        })
+
+    }, [])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -19,8 +29,12 @@ const Login = () => {
     }
 
     const SignIn = () => {
+
         Axios("login/", "POST", form).then((res) => {
             console.log(res)
+            if (res.status == 200) {
+                naviagte(res.data.route)
+            }
         })
     }
 
@@ -45,49 +59,9 @@ const Login = () => {
 
                     <div className='flex p-4 text-4xl text-white font-semibold'>Sign In</div>
 
+                    <LoginInput key={1} name="email" placeholder="example@mail.com" value={form.email} handleChange={handleChange} children={<MdOutlineMail />} />
 
-                    <div className="flex flex-col items-center justify-center p-4">
-
-                        <div className="flex items-center justify-center  w-full bg-white pl-3 rounded-lg  p-1 outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-orange-300">
-
-                            <p className="text-black self-start p-1 mt-2"><MdOutlineMail /></p>
-
-                            <input
-                                id="Email"
-                                name="email"
-                                type="email"
-                                value={form.email}
-                                onChange={handleChange}
-                                placeholder="example@mail.com"
-                                className="block  min-w-0 grow py-1.5 pl-1 pr-3 text-lg text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0"
-
-                            />
-                        </div>
-                        <div className="text-red-600 text-sm text-start w-full p-1"></div>
-
-                    </div>
-
-                    <div className="flex flex-col items-center justify-center p-4">
-
-                        <div className="flex items-center justify-center  w-full bg-white pl-3 rounded-lg  p-1 outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-orange-300">
-
-                            <p className="text-black self-start p-1 mt-1"><MdPassword /></p>
-
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                value={form.password}
-                                onChange={handleChange}
-                                placeholder="***********"
-                                className="block min-w-0 grow py-1.5 pl-1 pr-3 text-lg text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 "
-
-                            />
-                        </div>
-
-                        <div className="text-red-600 text-sm text-start w-full p-1"></div>
-
-                    </div>
+                    <LoginInput key={2} name="password" placeholder="******" value={form.password} handleChange={handleChange} children={<MdPassword />} />
 
                     <button
                         onClick={SignIn}
