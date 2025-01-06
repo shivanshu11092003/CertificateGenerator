@@ -13,6 +13,7 @@ const Dashboard = () => {
     const [selection, setSelection] = useState(false)
     const [areaSelector, setAreaSelector] = useState([])
     const [field, setField] = useState([])
+    const [json, setJson] = useState('')
 
     const dispatch = useDispatch()
     const form = useSelector(state => state.form.Form)
@@ -26,25 +27,43 @@ const Dashboard = () => {
     }
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        console.log(e.target.id)
-        console.log(value)
+        const { value } = e.target;
         const oldArray = [...field]
         const update = oldArray.find(a => a.id == e.target.id)
         update.keyName = value
         setField(oldArray)
-        console.log(field)
     }
+
+    const alignment = (id, value) => {
+        console.log(id, value)
+        setField(field.map((item) => {
+            if (item.id == id) {
+                const update = {
+                    ...item,
+                    alignment: value,
+                }
+
+                return update;
+
+            } else {
+                return item;
+            }
+        }))
+
+    }
+
+    const handleJsonData = (e) => setJson(data => data = e.target.value)
+
+
 
     const handleImageChange = (e) => {
         e.preventDefault();
         const images = URL.createObjectURL(e.target.files[0]);
         setImages(images);
-        setPImg(true)
+        setPImg(true);
     };
 
     const imgCoordinates = (e) => {
-        console.log("required", (e.target.naturalWidth / e.target.width) * e.nativeEvent.offsetX, (e.target.naturalHeight / e.target.height) * e.nativeEvent.offsetY)
         const xCordinate = Math.round((e.target.naturalWidth / e.target.width) * e.nativeEvent.offsetX)
         const ycordinate = Math.round((e.target.naturalHeight / e.target.height) * e.nativeEvent.offsetY)
         const requiredID = new Date().getTime()
@@ -61,7 +80,6 @@ const Dashboard = () => {
                 width: 0,
                 height: 0
             }])
-            console.log(areaSelector)
             setField([
                 ...field, {
                     id: requiredID,
@@ -70,11 +88,8 @@ const Dashboard = () => {
                     End: { "x2": 0, "y2": 0 },
 
                 }])
-            console.log(field)
             setSelection(true)
         } else {
-
-
 
             setField(field.map(item => {
                 if (item.id == form) {
@@ -104,15 +119,13 @@ const Dashboard = () => {
         setAreaSelector(areaSelector.filter(item => item.id != ID))
         const filteredArray = field.filter(item => item.id != ID)
         setField(filteredArray)
-        console.log(ID)
-        console.log(field.filter(item => item.id != ID))
-        console.log(areaSelector.filter(item => item.id != ID))
 
     }
 
+
+
     const SubmitForm = (e) => {
         e.preventDefault()
-        console.log(e.target)
         const data = [
             { name: "Shivanshu" },
             { name: "Nandini" },
@@ -121,7 +134,8 @@ const Dashboard = () => {
         ]
         const formData = new FormData(e.currentTarget);
         formData.append("location", JSON.stringify(field))
-        formData.append("data", JSON.stringify(data))
+        console.log(json)
+        formData.append("data", json)
 
         Axios("create/", "POST", formData).then((res) => {
             console.log("Call")
@@ -177,37 +191,96 @@ const Dashboard = () => {
 
                 <div className='flex flex-col h-full  w-full md:w-1/4'>
 
-                    <div className='flex w-full h-3/4 flex-col p-2 overflow-y-auto  '>
-                        <div className='border p-2 rounded-lg text-md font-bold'>Field's</div>
+                    <div className='flex  h-3/4 flex-col p-2 overflow-y-auto w-auto '>
+                        <div className='flex items-center justify-between border p-2 rounded-lg text-sm md:text-md font-bold'>
+                            <div>                            Field's                            </div>
+                            <div className='flex items-center px-3'><div>Choose Color:</div> <div><input className='' name='color' type="color" /></div></div>
+
+
+
+                        </div>
 
                         {
                             field.map((item, index) =>
 
-                                <InputBox key={index} id={item.id} keyName={item.keyName} Startx1={item.Start.x1} Starty1={item.Start.y1}
-                                    Endx2={item.End.x2} Endy2={item.End.y2} handleChange={handleChange} />
+                                <InputBox key={index} id={item.id} keyName={item.keyName} handleChange={handleChange}
+                                    alignment={alignment}
+                                />
 
                             )
                         }
 
                     </div>
 
-                    <div className='flex flex-col border h-full md:h-1/4 justify-between p-3  rounded-md  items-center'>
-                        <input type="file"
+                    <div className='flex flex-col border h-full md:h-2/4 justify-between p-3  rounded-lg  items-center'>
+                        <div>
+                            <div className='flex items-center justify-between' >
+                                <div className='' >CSV File:</div>
+                                <div>
+                                    <input type="file"
+                                        name='csvData'
+                                        placeholder='choose  .csv'
+                                        className="flex self-center mt-1 justify-center rounded-md px-3 py-1.5 text-sm/6  
+                                               font-semibold text-black focus-visible:outline focus-visible:outline-2
+                                                focus-visible:outline-offset-2 focus-visible:outline-blue-600
+                                                file:mr-4 file:py-2 file:px-4
+                                                file:rounded-full file:border-0
+                                                file:text-sm file:font-semibold
+                                                file:bg-blue-50 file:text-violet-500
+                                                hover:file:bg-violet-100"
 
-                            placeholder='choose  .csv'
-                            className="flex self-center
-                              mt-3 justify-center rounded-md bg-green-00 px-3 py-1.5 text-sm/6  
-                               font-semibold text-black focus-visible:outline focus-visible:outline-2
-                                focus-visible:outline-offset-2 focus-visible:outline-blue-600
-                                file:mr-4 file:py-2 file:px-4
-                                file:rounded-full file:border-0
-                                file:text-sm file:font-semibold
-                            file:bg-blue-50 file:text-violet-500
-                                hover:file:bg-violet-100  
-                                "
+                                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                    /></div>
 
-                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                        />
+
+                            </div>
+                            <div className='flex items-center justify-center' >
+                                <div className='font-semibold' >or</div>
+
+                            </div>
+                            <div className='flex items-center ' >
+                                <div className='' >Input Json:</div>
+                                <div>
+                                    <textarea type="text"
+                                        value={json}
+                                        onChange={handleJsonData}
+                                        placeholder='paste json'
+                                        className="flex self-center m-2 border  justify-center rounded-md px-3 py-1.5 text-sm/6  
+                                             text-black focus-visible:outline focus-visible:outline-2
+                                                focus-visible:outline-offset-2 focus-visible:outline-blue-600
+                                                hover:file:bg-violet-100"
+
+                                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                    />
+                                </div>
+
+
+                            </div>
+
+
+                            <div className='flex items-center ' >
+                                <div>Font Family:</div>
+                                <div>
+                                    <select name="font" id="font" className='flex self-center mt-2 justify-center rounded-md m-2  px-7 py-3 text-sm/6
+                                        font-semibold text-black focus-visible:outline focus-visible:outline-2
+                                        focus-visible:outline-offset-2 focus-visible:outline-white
+                                        bg-white border hover:file:bg-violet-100  
+                                        *:italic
+                                    '                                    >
+                                        <option key={1} value="">Select</option>
+                                        <option key={2} value="1">Times New Roman</option>
+                                        <option key={3} value="2">Garamond</option>
+                                        <option key={4} value="3">Baskerville</option>
+                                        <option key={5} value="4">Georgia</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
                         <input type='submit'
                             className="flex self-center 
                             w-1/4  mt-4 justify-center 

@@ -10,13 +10,13 @@ const Navbar = () => {
 
             </div>
 
-            <div className='flex items-center font-bold'>
+            <div className='flex items-center md:font-bold text-xs md:text-lg'>
                 <div className='flex '>
                     <div className='p-2 cursor-pointer	 '>Home</div>
                     <div className='p-2 cursor-pointer	'>Downloads</div>
 
                 </div>
-                <div className='flex items-center  p-2 text-lg'>
+                <div className='flex items-center  p-2 text-sm md:text-lg '>
                     <div><MdAccountCircle /></div>
                     <div className='font-light p-1 px-2'>Shivanshu Gupta</div>
                     <div className='p-1 h-3/4'><MdLogout /></div>

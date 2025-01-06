@@ -41,7 +41,7 @@ const Login = () => {
     return (
         <div className='flex  w-full  h-screen    items-center justify-center'>
 
-            <div className='flex  h-1/2 w-1/2 '>
+            <div className=' md:flex hidden h-1/2 w-1/2 '>
                 <DotLottieReact
                     src="https://lottie.host/b437eaa4-e4b4-48f7-894d-d9fee6e1624f/kRpMo2lFux.lottie"
                     loop
@@ -49,11 +49,11 @@ const Login = () => {
                 />
             </div>
 
-            <div className='flex flex-col items-center justify-center  text-white   bg-blue-600 w-1/2 h-full '>
+            <div className='flex flex-col items-center justify-center  text-white   bg-blue-600 w-full md:w-1/2 h-full '>
 
 
 
-                <div className='flex flex-col  drop-shadow-lg backdrop-sepia-0 w-1/2 h-2/4 rounded-lg p-3'>
+                <div className='flex flex-col  drop-shadow-lg backdrop-sepia-0 w-full md:w-1/2 h-2/4 rounded-lg p-3'>
 
                     <img src="/src/assets/new.png" alt="" className='h-1/2 w-1/2 ' />
 
@@ -71,7 +71,9 @@ const Login = () => {
                         Sign In
                     </button>
 
-                    <div className="flex self-center text-md p-2 mt-2">Don't have a account? <div className="px-1 hover:text-yellow-200 cursor-pointer">Sign Up</div> </div>
+                    <div className="flex self-center text-sm md:text-md p-2 mt-2">Don't have a account?
+                        <div className="px-1 hover:text-yellow-200 cursor-pointer">Sign Up</div>
+                    </div>
 
 
                 </div>
