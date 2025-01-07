@@ -1,25 +1,35 @@
 import React from 'react';
+import { BsDownload } from "react-icons/bs";
 import { MdAccountCircle, MdLogout } from "react-icons/md";
+import { RiDashboardHorizontalLine } from "react-icons/ri";
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+
+    const navigate = useNavigate();
+
+
+
     return (
         <div className='flex bg-blue-600 h-max items-center justify-between w-full text-white '>
 
             <div className='flex w-auto text-xl rounded-md text-center  font-semibold '>
-                <img src="/src/assets/new.png" alt="" className=' md:w-1/3 w-full ' />
+                <img src="/src/assets/new.png" alt="" className='w-40 ' />
 
             </div>
 
-            <div className='flex items-center md:font-bold text-xs md:text-lg'>
+            <div className='flex items-center md:font-semibold text-xs md:text-sm'>
                 <div className='flex '>
-                    <div className='p-2 cursor-pointer	 '>Home</div>
-                    <div className='p-2 cursor-pointer	'>Downloads</div>
+                    <div className='p-2 cursor-pointer hidden md:flex hover:drop-shadow-lg' onClick={(e) => navigate("/dashboard")}>Home</div>
+                    <div className='p-2  md:hidden flex' onClick={(e) => navigate("/dashboard")}> <RiDashboardHorizontalLine /> </div>
+                    <div className='p-2 cursor-pointer hidden md:flex' onClick={(e) => navigate("/downloads")}>Downloads</div>
+                    <div className='p-2  md:hidden flex' onClick={(e) => navigate("/downloads")}><BsDownload /></div>
 
                 </div>
-                <div className='flex items-center  p-2 text-sm md:text-lg '>
-                    <div><MdAccountCircle /></div>
-                    <div className='font-light p-1 px-2'>Shivanshu Gupta</div>
-                    <div className='p-1 h-3/4'><MdLogout /></div>
+                <div className='flex items-center  p-2 text-sm md:text-sm'>
+                    <div className='md:flex hidden'><MdAccountCircle /></div>
+                    <div className='font-semibold p-1 px-2'>Shivanshu</div>
+                    <div className='p-1 text-lg'><MdLogout /></div>
                 </div>
             </div>
 

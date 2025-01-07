@@ -277,10 +277,6 @@ const Dashboard = () => {
                             </div>
                         </div>
 
-
-
-
-
                         <input type='submit'
                             className="flex self-center 
                             w-1/4  mt-4 justify-center 
