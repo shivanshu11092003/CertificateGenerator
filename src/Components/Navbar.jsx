@@ -18,18 +18,18 @@ const Navbar = () => {
 
             </div>
 
-            <div className='flex items-center md:font-semibold text-xs md:text-sm'>
-                <div className='flex '>
+            <div className='flex items-center md:font-semibold text-xs md:text-lg/3'>
+                <div className='flex px-2'>
                     <div className='p-2 cursor-pointer hidden md:flex hover:drop-shadow-lg' onClick={(e) => navigate("/dashboard")}>Home</div>
                     <div className='p-2  md:hidden flex' onClick={(e) => navigate("/dashboard")}> <RiDashboardHorizontalLine /> </div>
                     <div className='p-2 cursor-pointer hidden md:flex' onClick={(e) => navigate("/downloads")}>Downloads</div>
                     <div className='p-2  md:hidden flex' onClick={(e) => navigate("/downloads")}><BsDownload /></div>
 
                 </div>
-                <div className='flex items-center  p-2 text-sm md:text-sm'>
+                <div className='flex items-center  p-2 text-sm md:text-lg'>
                     <div className='md:flex hidden'><MdAccountCircle /></div>
                     <div className='font-semibold p-1 px-2'>Shivanshu</div>
-                    <div className='p-1 text-lg'><MdLogout /></div>
+                    <div className='px-3 '><MdLogout /></div>
                 </div>
             </div>
 

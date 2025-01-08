@@ -2,8 +2,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'https://fe9a-2409-40d2-3c-1156-cc02-3234-5c2b-8fb7.ngrok-free.app/',
-    timeout: 1000,
+    baseURL: 'https://10.21.96.131:8000/main/',
     headers: {
         'Content-Type': 'multipart/form-data'
     }

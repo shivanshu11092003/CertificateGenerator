@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { MdCancel, MdOutlineUnarchive } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { Rnd } from 'react-rnd';
 import Axios from '../Axios/Axios';
 import InputBox from '../Components/InputBox';
 import Navbar from '../Components/Navbar';
@@ -166,21 +167,29 @@ const Dashboard = () => {
 
 
                         </div> : <div className="flex relative flex-col h-max w-4/5 z-0 ">
-                            <div className='flex self-end z-0' onClick={(e) => setPImg(false)}><MdCancel /></div>
+                            <div className='flex self-end z-0 hover:text-red-600 ' onClick={(e) => setPImg(false)}><MdCancel /></div>
 
-                            <img src={images} alt="" onClick={imgCoordinates} className='cursor-crosshair drop-shadow-md z-0 w-5/6 ' />
+                            <img src={images} alt="" onMouseDown={imgCoordinates} className='cursor-crosshair drop-shadow-md z-0 w-5/6 ' />
 
                             {
                                 areaSelector.length ?
-                                    areaSelector.map((item, index) => <div key={index} id={index}
+                                    areaSelector.map((item, index) => <Rnd
+                                        key={index}
+                                        size={{ width: item.width, height: item.height }}
+                                    > <div id={index}
+
                                         style={{ transform: `translate(${item.left}px, ${item.top}px)`, width: item.width }}
                                         className="flex   justify-between  items-center h-10 absolute z-10  border border-blue-600 bg-blue-300 ">
 
-                                        <div className='flex text-base w-full justify-center'>{field[index].keyName}</div>
-                                        <div className='flex  w-4 self-start h-max ' onClick={(e) => delAreaSelector(item.id)}><MdCancel /></div>
+                                            <div className='flex text-base w-full justify-center'>{field[index].keyName}</div>
 
 
-                                    </div>
+
+                                            <div className='flex  w-4 self-start h-max ' onClick={(e) => delAreaSelector(item.id)}><MdCancel /></div>
+
+
+                                        </div>
+                                    </Rnd>
                                     )
                                     : <></>
                             }

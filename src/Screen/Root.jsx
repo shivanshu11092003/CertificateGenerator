@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
+import Loader from '../Components/Loader'
 
 const Root = () => {
     return (
         <>
-            <Outlet />
+            <Suspense fallback={<Loader />}>
+                <Outlet />
+
+
+            </Suspense>
         </>
     )
 }

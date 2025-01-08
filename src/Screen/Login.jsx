@@ -33,7 +33,7 @@ const Login = () => {
         Axios("login/", "POST", form).then((res) => {
             console.log(res)
             if (res.status == 200) {
-                naviagte(res.data.route)
+                naviagte("/" + res.data.route)
             }
         })
     }
