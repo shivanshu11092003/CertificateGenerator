@@ -1,7 +1,17 @@
 import React from 'react';
-import { GoClock, GoStar } from "react-icons/go";
-import { MdOutlineFolderCopy, MdOutlineFolderDelete } from "react-icons/md";
+import { AiFillClockCircle } from "react-icons/ai";
+import { CiStar } from "react-icons/ci";
+import { FaFolder } from "react-icons/fa";
+import { FaFolderOpen } from "react-icons/fa6";
+import { LuClock } from "react-icons/lu";
+import { MdFolderDelete, MdOutlineFolderDelete } from "react-icons/md";
+import { TiStarFullOutline } from "react-icons/ti";
 import { useNavigate } from 'react-router-dom';
+
+
+
+
+
 
 const SideBar = () => {
 
@@ -10,49 +20,53 @@ const SideBar = () => {
     const Navigate = (route) => navigate(route)
 
     return (
-        <div className='w-1/6 bg-gray-100'>
+        <div className='w-[20rem] '>
 
-            <div className='md:flex border-e border-b drop-shadow-lg py-3 px-3  m-2 font-bold text-sm mt-1 hidden'>My Folder</div>
+            <div className='md:flex border-2 mt-2  drop-shadow-lg py-3 px-3 rounded-md  m-2 font-bold  hidden'>My Folder</div>
 
             <div className='mt-5'>
 
-                <div className='flex  items-center justify-center md:justify-start py-4 px-3  text-lg  m-2
-             rounded-md hover:bg-blue-400 hover:drop-shadow-lg hover:text-white  transition transform active:bg-blue-500 
-             hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none'
+                <div className='flex group items-center justify-center md:justify-start py-4 px-3  text-lg  m-2
+             rounded-md hover:text-blue-400 hover:drop-shadow-lg  transition transform active:bg-blue-300 
+             hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none cursor-pointer'
                     onClick={(e) => Navigate("recent")}
                 >
-                    <div className='text-gray-500'> <GoClock /> </div>
-                    <div className='px-3 hidden md:flex text-sm font-medium'>Recent</div>
+                    <div className='text-blue-500 hidden group-hover:flex'> <AiFillClockCircle /> </div>
+                    <div className='text-gray-500 flex group-hover:hidden'> <LuClock /> </div>
+                    <div className='px-3 hidden md:flex text-base font-semibold'>Recent</div>
                 </div>
 
                 <div className='flex group items-center justify-center md:justify-start  py-4 px-3  text-lg mt-1 m-2
-             rounded-md hover:bg-blue-400 hover:drop-shadow-lg hover:text-white  transition transform active:bg-blue-500 
-             hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none'
+             rounded-md hover:text-blue-400 hover:drop-shadow-lg   transition transform active:bg-blue-300 
+             hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none cursor-pointer'
                     onClick={(e) => Navigate("allfiles")}
 
                 >
-                    <div className='text-blue-500 group-hover:text-white'> <MdOutlineFolderCopy /> </div>
-                    <div className='px-3 hidden md:flex text-sm font-medium'>All Files</div>
+                    <div className='text-blue-500 hidden group-hover:flex'> <FaFolderOpen /> </div>
+                    <div className='text-slate-800 flex group-hover:hidden'> <FaFolder /> </div>
+                    <div className='px-3 hidden md:flex text-base font-semibold'>All Files</div>
                 </div>
 
-                <div className='flex  items-center justify-center md:justify-start  py-4 px-3  text-lg mt-1 m-2
-             rounded-md hover:bg-blue-400 hover:drop-shadow-lg hover:text-white  transition transform active:bg-blue-500 
-             hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none'
+                <div className='flex group items-center justify-center md:justify-start  py-4 px-3  text-lg mt-1 m-2
+             rounded-md hover:text-blue-400 hover:drop-shadow-lg   transition transform active:bg-blue-300 
+             hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none cursor-pointer'
                     onClick={(e) => Navigate("starred")}
 
                 >
-                    <div className='text-yellow-400' > <GoStar /> </div>
-                    <div className='px-3 hidden md:flex text-sm font-medium'>Starred Files</div>
+                    <div className='text-blue-500 hidden group-hover:flex'> <TiStarFullOutline /> </div>
+                    <div className='text-yellow-500 flex group-hover:hidden'> <CiStar /> </div>
+                    <div className='px-3 hidden md:flex text-base font-semibold'>Starred </div>
                 </div>
 
-                <div className='flex  items-center justify-center md:justify-start  py-4 px-3  text-lg mt-1 m-2
-            rounded-md hover:bg-blue-400 hover:drop-shadow-lg hover:text-white  transition transform active:bg-blue-500 
-             hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none'
+                <div className='flex group  items-center justify-center md:justify-start  py-4 px-3  text-lg mt-1 m-2
+            rounded-md hover:text-blue-400 hover:drop-shadow-lg   transition transform active:bg-blue-300 
+             hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none cursor-pointer'
                     onClick={(e) => Navigate("deleted")}
 
                 >
-                    <div className='text-red-500'><MdOutlineFolderDelete /></div>
-                    <div className='px-3 hidden md:flex text-sm font-medium'>Deleted Folder's</div>
+                    <div className='text-blue-500 hidden group-hover:flex'> <MdFolderDelete /> </div>
+                    <div className='text-red-500 flex group-hover:hidden'> <MdOutlineFolderDelete /> </div>
+                    <div className='px-3 hidden md:flex text-base font-semibold'>Deleted</div>
                 </div>
 
             </div>

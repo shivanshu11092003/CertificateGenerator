@@ -18,10 +18,6 @@ const Downloads = () => {
                 <Outlet />
 
 
-
-
-
-
             </div>
         </div>
     )

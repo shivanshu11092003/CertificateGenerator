@@ -1,9 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { MdCancel, MdOutlineUnarchive } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Rnd } from 'react-rnd';
+import { useNavigate } from 'react-router-dom';
 import Axios from '../Axios/Axios';
 import InputBox from '../Components/InputBox';
+import Loader from '../Components/Loader';
 import Navbar from '../Components/Navbar';
 import { addID } from '../Redux/Slice';
 
@@ -15,9 +17,23 @@ const Dashboard = () => {
     const [areaSelector, setAreaSelector] = useState([])
     const [field, setField] = useState([])
     const [json, setJson] = useState('')
+    const [font, setFont] = useState([])
+    const [align, setAlign] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const form = useSelector(state => state.form.Form)
+
+    useEffect(() => {
+        Axios("list/", "GET").then((res) => {
+            if (res.status == 200) {
+                setAlign(s => s = res.data.details[0].Alignment)
+                setFont(s => s = res.data.details[1].Fonts)
+            }
+
+        })
+    }, [])
 
 
     const selectImage = () => {
@@ -137,9 +153,18 @@ const Dashboard = () => {
         formData.append("location", JSON.stringify(field))
         console.log(json)
         formData.append("data", json)
+        setIsLoading(s => s = true)
 
         Axios("create/", "POST", formData).then((res) => {
+            setIsLoading(s => s = false)
+            window.open("https://10.21.96.245:8888/certificate" + res.data.zip_url + "/")
+
+
             console.log("Call")
+        }).catch((res) => {
+            setIsLoading(s => s = false)
+
+
         })
 
 
@@ -151,85 +176,84 @@ const Dashboard = () => {
         <div className='flex flex-col h-screen  w-screen'>
 
             <Navbar />
+            {
+                isLoading ? <Loader /> : <form onSubmit={SubmitForm} className='flex flex-col md:flex-row bg-white-50 h-full  w-full' encType="multipart/form-data" >
+
+                    <div className='flex flex-col bg-gray-50 items-center justify-center border h-full w-full md:w-3/4 text-3xl' onClick={selectImage}>
+                        <input name='image' hidden type="file" ref={input} onChange={handleImageChange} accept="image/png, image/jpg, image/jpeg" />
 
 
-            <form onSubmit={SubmitForm} className='flex flex-col md:flex-row bg-white-50 h-full  w-full' encType="multipart/form-data" >
+                        {
+                            !pImg ? <div className='flex p-4  rounded-lg justify-center items-center text-gray-400 '>
 
-                <div className='flex flex-col bg-gray-50 items-center justify-center border h-full w-full md:w-3/4 text-3xl' onClick={selectImage}>
-                    <input name='image' hidden type="file" ref={input} onChange={handleImageChange} accept="image/png, image/jpg, image/jpeg" />
-
-
-                    {
-                        !pImg ? <div className='flex p-4  rounded-lg justify-center items-center text-gray-400 '>
-
-                            <div className='p-2'><MdOutlineUnarchive /></div>
-                            <div className='text-2xl' >Select Thumbnail</div>
+                                <div className='p-2'><MdOutlineUnarchive /></div>
+                                <div className='text-2xl' >Select Template</div>
 
 
-                        </div> : <div className="flex relative flex-col h-max w-4/5 z-0 ">
-                            <div className='flex self-end z-0 hover:text-red-600 ' onClick={(e) => setPImg(false)}><MdCancel /></div>
+                            </div> : <div className="flex relative flex-col h-max w-4/5 z-0 ">
+                                <div className='flex self-end z-0 hover:text-red-600 ' onClick={(e) => setPImg(false)}><MdCancel /></div>
 
-                            <img src={images} alt="" onMouseDown={imgCoordinates} className='cursor-crosshair drop-shadow-md z-0 w-5/6 ' />
+                                <img src={images} alt="" onMouseDown={imgCoordinates} className='cursor-crosshair drop-shadow-md z-0 w-5/6 ' />
+
+                                {
+                                    areaSelector.length ?
+                                        areaSelector.map((item, index) => <Rnd
+                                            key={index}
+                                            size={{ width: item.width, height: item.height }}
+                                        > <div id={index}
+
+                                            style={{ transform: `translate(${item.left}px, ${item.top}px)`, width: item.width }}
+                                            className="flex   justify-between  items-center h-10 absolute z-10  border border-blue-600 bg-blue-300 ">
+
+                                                <div className='flex text-base w-full justify-center'>{field[index].keyName}</div>
+
+
+
+                                                <div className='flex  w-4 self-start h-max ' onClick={(e) => delAreaSelector(item.id)}><MdCancel /></div>
+
+
+                                            </div>
+                                        </Rnd>
+                                        )
+                                        : <></>
+                                }
+
+                            </div>
+                        }
+                    </div>
+
+                    <div className='flex flex-col h-full  w-full md:w-[40rem]'>
+
+                        <div className='flex  h-3/4 flex-col p-2 overflow-y-auto w-auto '>
+                            <div className='flex items-center justify-between border p-2 rounded-lg text-sm md:text-md font-bold'>
+                                <div>                            Field's                            </div>
+                                <div className='flex items-center px-3'><div>Choose Color:</div> <div><input className='' name='color' type="color" /></div></div>
+
+
+
+                            </div>
 
                             {
-                                areaSelector.length ?
-                                    areaSelector.map((item, index) => <Rnd
-                                        key={index}
-                                        size={{ width: item.width, height: item.height }}
-                                    > <div id={index}
+                                field.map((item, index) =>
 
-                                        style={{ transform: `translate(${item.left}px, ${item.top}px)`, width: item.width }}
-                                        className="flex   justify-between  items-center h-10 absolute z-10  border border-blue-600 bg-blue-300 ">
+                                    <InputBox key={index} id={item.id} keyName={item.keyName} handleChange={handleChange}
+                                        alignment={alignment} alignArray={align}
+                                    />
 
-                                            <div className='flex text-base w-full justify-center'>{field[index].keyName}</div>
-
-
-
-                                            <div className='flex  w-4 self-start h-max ' onClick={(e) => delAreaSelector(item.id)}><MdCancel /></div>
-
-
-                                        </div>
-                                    </Rnd>
-                                    )
-                                    : <></>
+                                )
                             }
 
                         </div>
-                    }
-                </div>
 
-                <div className='flex flex-col h-full  w-full md:w-1/4'>
+                        <div className='flex flex-col border-x-2 h-full md:h-2/4 justify-between p-3  rounded-lg  items-center'>
+                            <div className='w-full'>
 
-                    <div className='flex  h-3/4 flex-col p-2 overflow-y-auto w-auto '>
-                        <div className='flex items-center justify-between border p-2 rounded-lg text-sm md:text-md font-bold'>
-                            <div>                            Field's                            </div>
-                            <div className='flex items-center px-3'><div>Choose Color:</div> <div><input className='' name='color' type="color" /></div></div>
-
-
-
-                        </div>
-
-                        {
-                            field.map((item, index) =>
-
-                                <InputBox key={index} id={item.id} keyName={item.keyName} handleChange={handleChange}
-                                    alignment={alignment}
-                                />
-
-                            )
-                        }
-
-                    </div>
-
-                    <div className='flex flex-col border h-full md:h-2/4 justify-between p-3  rounded-lg  items-center'>
-                        <div>
-                            <div className='flex items-center justify-between' >
-                                <div className='' >CSV File:</div>
-                                <div>
-                                    <input type="file"
-                                        name='csvData'
-                                        placeholder='choose  .csv'
-                                        className="flex self-center mt-1 justify-center rounded-md px-3 py-1.5 text-sm/6  
+                                <div className='flex'>
+                                    <div className='flex items-center justify-between' >
+                                        <input type="file"
+                                            name='csvData'
+                                            placeholder='choose  .csv'
+                                            className="flex self-center mt-1 justify-center rounded-md px-1 py-1.5 text-sm/6  
                                                font-semibold text-black focus-visible:outline focus-visible:outline-2
                                                 focus-visible:outline-offset-2 focus-visible:outline-blue-600
                                                 file:mr-4 file:py-2 file:px-4
@@ -238,72 +262,84 @@ const Dashboard = () => {
                                                 file:bg-blue-50 file:text-violet-500
                                                 hover:file:bg-violet-100"
 
-                                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                    /></div>
+                                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                        />
 
 
-                            </div>
-                            <div className='flex items-center justify-center' >
-                                <div className='font-semibold' >or</div>
+                                    </div>
+                                    <div className='flex items-center justify-center p-3' >
+                                        <div className='font-semibold' >or</div>
 
-                            </div>
-                            <div className='flex items-center ' >
-                                <div className='' >Input Json:</div>
-                                <div>
-                                    <textarea type="text"
-                                        value={json}
-                                        onChange={handleJsonData}
-                                        placeholder='paste json'
-                                        className="flex self-center m-2 border  justify-center rounded-md px-3 py-1.5 text-sm/6  
+                                    </div>
+                                    <div className='flex items-center ' >
+                                        <div>
+                                            <textarea type="text"
+                                                value={json}
+                                                onChange={handleJsonData}
+                                                placeholder='paste json'
+                                                className="flex self-center m-2 border  justify-center rounded-md px-3 py-1.5 text-sm/6  
                                              text-black focus-visible:outline focus-visible:outline-2
                                                 focus-visible:outline-offset-2 focus-visible:outline-blue-600
                                                 hover:file:bg-violet-100"
 
-                                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                    />
+                                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                            />
+                                        </div>
+
+
+                                    </div>
                                 </div>
 
 
-                            </div>
-
-
-                            <div className='flex items-center ' >
-                                <div>Font Family:</div>
-                                <div>
-                                    <select name="font" id="font" className='flex self-center mt-2 justify-center rounded-md m-2  px-7 py-3 text-sm/6
+                                <div className='flex items-center ' >
+                                    <div>Font Family:</div>
+                                    <div>
+                                        <select name="font" id="font" className='flex self-center mt-2 justify-center rounded-md m-2  px-7 py-3 text-sm/6
                                         font-semibold text-black focus-visible:outline focus-visible:outline-2
                                         focus-visible:outline-offset-2 focus-visible:outline-white
                                         bg-white border hover:file:bg-violet-100  
                                         *:italic
                                     '                                    >
-                                        <option key={1} value="">Select</option>
-                                        <option key={2} value="1">Times New Roman</option>
-                                        <option key={3} value="2">Garamond</option>
-                                        <option key={4} value="3">Baskerville</option>
-                                        <option key={5} value="4">Georgia</option>
-                                    </select>
+                                            <option value="">Select</option>
+                                            {
+                                                font.length ?
+                                                    font.map((item, index) =>
+                                                        <option key={index} value={item.id}>{item.value}</option>
+                                                    )
+                                                    : <option value="">Please wait</option>
+
+
+
+
+                                            }
+
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <input type='submit'
-                            className="flex self-center 
+                            <input type='submit'
+                                className="flex self-center 
                             w-1/4  mt-4 justify-center 
                             rounded-md bg-green-00 px-3 
                             py-1.5 text-sm/6 bg-blue-500  font-semibold text-white 
                             shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 
                                 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
-                        />
+                            />
+
+                        </div>
+
+
 
                     </div>
 
 
+                </form>
+            }
 
-                </div>
 
 
-            </form>
 
         </div>
     )

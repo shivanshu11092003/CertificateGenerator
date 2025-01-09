@@ -1,6 +1,6 @@
 import React from 'react'
 
-const InputBox = ({ id, keyName, handleChange, alignment }) => {
+const InputBox = ({ id, keyName, handleChange, alignment, alignArray }) => {
     return (
         <div key={id} className='flex mt-3    flex-col border rounded-lg p-2 w-auto' >
 
@@ -35,9 +35,14 @@ const InputBox = ({ id, keyName, handleChange, alignment }) => {
                                     '
                     onChange={e => alignment(id, e.target.value)} >
                     <option value="">Alignment</option>
-                    <option value="1">Left</option>
-                    <option value="2">Center</option>
-                    <option value="3">Right</option>
+                    {
+                        alignArray.length ?
+                            alignArray.map((item, index) =>
+                                <option key={index} value={item.id}>{item.value}</option>
+                            ) : <option value="">Please wait</option>
+
+                    }
+
 
                 </select>
 

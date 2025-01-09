@@ -22,8 +22,8 @@ const Navbar = () => {
                 <div className='flex px-2'>
                     <div className='p-2 cursor-pointer hidden md:flex hover:drop-shadow-lg' onClick={(e) => navigate("/dashboard")}>Home</div>
                     <div className='p-2  md:hidden flex' onClick={(e) => navigate("/dashboard")}> <RiDashboardHorizontalLine /> </div>
-                    <div className='p-2 cursor-pointer hidden md:flex' onClick={(e) => navigate("/downloads")}>Downloads</div>
-                    <div className='p-2  md:hidden flex' onClick={(e) => navigate("/downloads")}><BsDownload /></div>
+                    <div className='p-2 cursor-pointer hidden md:flex' onClick={(e) => navigate("/downloads/recent")}>Downloads</div>
+                    <div className='p-2  md:hidden flex' onClick={(e) => navigate("/downloads/recent")}><BsDownload /></div>
 
                 </div>
                 <div className='flex items-center  p-2 text-sm md:text-lg'>

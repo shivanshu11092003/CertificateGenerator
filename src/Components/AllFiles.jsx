@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { PiFolderPlusFill } from "react-icons/pi";
 
 const fileArray = [
     { id: 1, name: "Picture" },
@@ -14,13 +15,18 @@ const AllFiles = () => {
 
     return (
         <div className='w-5/6 border-x-2 drop-shadow-md rounded-2xl'>
-            <div className='flex  py-3 px-4 font-bold text-lg mt-1 ' >All Files</div>
-            <div className='flex mt-3 flex-wrap w-full justify-center'>
+            <div className='flex justify-between py-3 px-6  mt-3'>
+                <div className='flex  font-bold text-xl ' >All Files</div>
+                <button className='px-6 py-1 rounded-md  flex justify-between items-center text-blue-500  border'>
+                    <PiFolderPlusFill />&nbsp;Add
+                </button>
+            </div>
+            <div className='flex mt-3 flex-wrap w-full px-6'>
                 {file.map((item) =>
                     <div key={item.id} className='flex group hover:bg-gray-100  p-1 m-1 flex-col justify-center 
-                rounded-lg  items-center w-56 min-h-32'>
+                rounded-lg  items-center w-40 min-h-32'>
                         <div className='flex justify-center items-center'>
-                            <img className='w-1/4  transition transform
+                            <img className='w-1/2  transition transform
                          hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none' src="/src/assets/folder.png" alt="" />                                </div>
                         <div className='text-sm font-medium mt-2'> {item.name}</div>
 
