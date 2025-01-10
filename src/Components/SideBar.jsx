@@ -33,7 +33,7 @@ const SideBar = () => {
                 >
                     <div className='text-blue-500 hidden group-hover:flex'> <AiFillClockCircle /> </div>
                     <div className='text-gray-500 flex group-hover:hidden'> <LuClock /> </div>
-                    <div className='px-3 hidden md:flex text-base font-semibold'>Recent</div>
+                    <div className='px-4 text-gray-700 group-hover:text-blue-500 hidden md:flex text-lg '>Recent</div>
                 </div>
 
                 <div className='flex group items-center justify-center md:justify-start  py-4 px-3  text-lg mt-1 m-2
@@ -44,7 +44,7 @@ const SideBar = () => {
                 >
                     <div className='text-blue-500 hidden group-hover:flex'> <FaFolderOpen /> </div>
                     <div className='text-slate-800 flex group-hover:hidden'> <FaFolder /> </div>
-                    <div className='px-3 hidden md:flex text-base font-semibold'>All Files</div>
+                    <div className='px-4 text-gray-700 group-hover:text-blue-500 hidden md:flex text-lg '>All Files</div>
                 </div>
 
                 <div className='flex group items-center justify-center md:justify-start  py-4 px-3  text-lg mt-1 m-2
@@ -55,7 +55,7 @@ const SideBar = () => {
                 >
                     <div className='text-blue-500 hidden group-hover:flex'> <TiStarFullOutline /> </div>
                     <div className='text-yellow-500 flex group-hover:hidden'> <CiStar /> </div>
-                    <div className='px-3 hidden md:flex text-base font-semibold'>Starred </div>
+                    <div className='px-4 text-gray-700  group-hover:text-blue-500 hidden md:flex text-lg '>Starred </div>
                 </div>
 
                 <div className='flex group  items-center justify-center md:justify-start  py-4 px-3  text-lg mt-1 m-2
@@ -66,7 +66,7 @@ const SideBar = () => {
                 >
                     <div className='text-blue-500 hidden group-hover:flex'> <MdFolderDelete /> </div>
                     <div className='text-red-500 flex group-hover:hidden'> <MdOutlineFolderDelete /> </div>
-                    <div className='px-3 hidden md:flex text-base font-semibold'>Deleted</div>
+                    <div className='px-4 text-gray-700 group-hover:text-blue-500  hidden md:flex text-lg '>Deleted</div>
                 </div>
 
             </div>

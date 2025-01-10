@@ -3,10 +3,21 @@ import { BsDownload } from "react-icons/bs";
 import { MdAccountCircle, MdLogout } from "react-icons/md";
 import { RiDashboardHorizontalLine } from "react-icons/ri";
 import { useNavigate } from 'react-router-dom';
+import Axios from '../Axios/Axios';
 
 const Navbar = () => {
 
     const navigate = useNavigate();
+
+    const logout = () => {
+        Axios("logout/", "GET").then((res) => {
+            if (res.status == 200) {
+                navigate(res.data.route);
+            }
+        })
+
+    }
+
 
 
 
@@ -29,7 +40,7 @@ const Navbar = () => {
                 <div className='flex items-center  p-2 text-sm md:text-lg'>
                     <div className='md:flex hidden'><MdAccountCircle /></div>
                     <div className='font-semibold p-1 px-2'>Shivanshu</div>
-                    <div className='px-3 '><MdLogout /></div>
+                    <div className='px-3  ' onClick={logout}><MdLogout /></div>
                 </div>
             </div>
 

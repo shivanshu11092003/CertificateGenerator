@@ -121,7 +121,7 @@ const Dashboard = () => {
             field.map(Item => {
                 if (Item.id == form) {
 
-                    const newUpdate = areaSelector.map((item) => item.id == form ? { ...item, height: Item.End.y2 - Item.Start.y1, width: e.nativeEvent.offsetX - item.left } : item)
+                    const newUpdate = areaSelector.map((item) => item.id == form ? { ...item, height: Math.abs(Item.End.y2 - Item.Start.y1), width: Math.abs(e.nativeEvent.offsetX - item.left) } : item)
                     setAreaSelector(newUpdate)
 
                 }
@@ -173,7 +173,7 @@ const Dashboard = () => {
 
 
     return (
-        <div className='flex flex-col h-screen  w-screen'>
+        <div className='flex flex-col h-[100vh]  w-[100vw]'>
 
             <Navbar />
             {
@@ -184,7 +184,8 @@ const Dashboard = () => {
 
 
                         {
-                            !pImg ? <div className='flex p-4  rounded-lg justify-center items-center text-gray-400 '>
+                            !pImg ? <div className='flex p-4  h-full
+                             rounded-lg justify-center items-center text-gray-400 '>
 
                                 <div className='p-2'><MdOutlineUnarchive /></div>
                                 <div className='text-2xl' >Select Template</div>
@@ -193,7 +194,12 @@ const Dashboard = () => {
                             </div> : <div className="flex relative flex-col h-max w-4/5 z-0 ">
                                 <div className='flex self-end z-0 hover:text-red-600 ' onClick={(e) => setPImg(false)}><MdCancel /></div>
 
-                                <img src={images} alt="" onMouseDown={imgCoordinates} className='cursor-crosshair drop-shadow-md z-0 w-5/6 ' />
+                                <div className='w-[50rem] h-full'>
+                                    <img src={images} alt="" onMouseDown={imgCoordinates} className='cursor-crosshair drop-shadow-md z-0  ' />
+
+
+                                </div>
+
 
                                 {
                                     areaSelector.length ?
@@ -202,12 +208,10 @@ const Dashboard = () => {
                                             size={{ width: item.width, height: item.height }}
                                         > <div id={index}
 
-                                            style={{ transform: `translate(${item.left}px, ${item.top}px)`, width: item.width }}
+                                            style={{ transform: `translate(${item.left}px, ${item.top + 20}px)`, width: item.width, height: item.height + 10 }}
                                             className="flex   justify-between  items-center h-10 absolute z-10  border border-blue-600 bg-blue-300 ">
 
                                                 <div className='flex text-base w-full justify-center'>{field[index].keyName}</div>
-
-
 
                                                 <div className='flex  w-4 self-start h-max ' onClick={(e) => delAreaSelector(item.id)}><MdCancel /></div>
 
@@ -222,52 +226,32 @@ const Dashboard = () => {
                         }
                     </div>
 
-                    <div className='flex flex-col h-full  w-full md:w-[40rem]'>
+                    <div className='flex flex-col h-full     w-full md:w-[40rem]'>
 
-                        <div className='flex  h-3/4 flex-col p-2 overflow-y-auto w-auto '>
-                            <div className='flex items-center justify-between border p-2 rounded-lg text-sm md:text-md font-bold'>
-                                <div>                            Field's                            </div>
-                                <div className='flex items-center px-3'><div>Choose Color:</div> <div><input className='' name='color' type="color" /></div></div>
+                        <div>
+                            <div className='flex  flex-col border-y rounded-lg p-1'>
 
 
+                                <div className='flex md:flex-row  flex-col rounded-md justify-center items-center p-2'>
 
-                            </div>
-
-                            {
-                                field.map((item, index) =>
-
-                                    <InputBox key={index} id={item.id} keyName={item.keyName} handleChange={handleChange}
-                                        alignment={alignment} alignArray={align}
-                                    />
-
-                                )
-                            }
-
-                        </div>
-
-                        <div className='flex flex-col border-x-2 h-full md:h-2/4 justify-between p-3  rounded-lg  items-center'>
-                            <div className='w-full'>
-
-                                <div className='flex'>
                                     <div className='flex items-center justify-between' >
                                         <input type="file"
                                             name='csvData'
                                             placeholder='choose  .csv'
-                                            className="flex self-center mt-1 justify-center rounded-md px-1 py-1.5 text-sm/6  
-                                               font-semibold text-black focus-visible:outline focus-visible:outline-2
-                                                focus-visible:outline-offset-2 focus-visible:outline-blue-600
-                                                file:mr-4 file:py-2 file:px-4
-                                                file:rounded-full file:border-0
-                                                file:text-sm file:font-semibold
-                                                file:bg-blue-50 file:text-violet-500
-                                                hover:file:bg-violet-100"
+                                            className="flex self-center mt-1 justify-center rounded-md 
+                px-1 py-1.5 text-sm/6  font-semibold text-black focus-visible:outline
+                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 
+                 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm 
+                 file:font-semibold file:bg-blue-50 file:text-violet-500
+                 hover:file:bg-violet-100"
 
                                             accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                                         />
 
 
                                     </div>
-                                    <div className='flex items-center justify-center p-3' >
+
+                                    <div className='flex items-center justify-center pe-5' >
                                         <div className='font-semibold' >or</div>
 
                                     </div>
@@ -278,9 +262,9 @@ const Dashboard = () => {
                                                 onChange={handleJsonData}
                                                 placeholder='paste json'
                                                 className="flex self-center m-2 border  justify-center rounded-md px-3 py-1.5 text-sm/6  
-                                             text-black focus-visible:outline focus-visible:outline-2
-                                                focus-visible:outline-offset-2 focus-visible:outline-blue-600
-                                                hover:file:bg-violet-100"
+                  text-black focus-visible:outline focus-visible:outline-2
+                    focus-visible:outline-offset-2 focus-visible:outline-blue-600
+                  hover:file:bg-violet-100"
 
                                                 accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                                             />
@@ -291,16 +275,20 @@ const Dashboard = () => {
                                 </div>
 
 
-                                <div className='flex items-center ' >
-                                    <div>Font Family:</div>
-                                    <div>
-                                        <select name="font" id="font" className='flex self-center mt-2 justify-center rounded-md m-2  px-7 py-3 text-sm/6
-                                        font-semibold text-black focus-visible:outline focus-visible:outline-2
-                                        focus-visible:outline-offset-2 focus-visible:outline-white
-                                        bg-white border hover:file:bg-violet-100  
-                                        *:italic
-                                    '                                    >
-                                            <option value="">Select</option>
+
+
+                            </div>
+
+                            <div className='flex flex-row items-center justify-between mt-3 border px-2 py-1 m-1 rounded-lg text-sm md:text-md font-bold'>
+                                <div className='ps-1'>                            Field's                            </div>
+                                <div className='flex  items-center justify-between  rounded-md px-1'>
+                                    <div className='flex items-center ' >
+                                        <select name="font" id="font" className='flex self-center mt-2 justify-center rounded-md m-2  px-2  py-2 text-sm/6
+            font-semibold text-black focus-visible:outline focus-visible:outline-2
+            focus-visible:outline-offset-2 focus-visible:outline-white
+          bg-white border hover:file:bg-violet-100  
+            *:italic' >
+                                            <option value="">Select Font</option>
                                             {
                                                 font.length ?
                                                     font.map((item, index) =>
@@ -315,24 +303,54 @@ const Dashboard = () => {
 
                                         </select>
                                     </div>
+
+                                    <div className='flex rounded-md p-1 items-center   border '>
+                                        <div className='text-sm font-semibold px-2'>Choose Color:</div>
+                                        <div><input className='mt-1' name='color' type="color" /></div>
+                                    </div>
+
                                 </div>
+
+
                             </div>
 
-                            <input type='submit'
-                                className="flex self-center 
-                            w-1/4  mt-4 justify-center 
-                            rounded-md bg-green-00 px-3 
-                            py-1.5 text-sm/6 bg-blue-500  font-semibold text-white 
-                            shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 
-                                focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            <div className='flex flex-col  overflow-y-auto w-auto '>
 
-                            />
+
+                                {
+                                    field.map((item, index) =>
+
+                                        <InputBox key={index} id={item.id} keyName={item.keyName} handleChange={handleChange}
+                                            alignment={alignment} alignArray={align}
+                                        />
+
+                                    )
+                                }
+
+                            </div>
+
+                        </div>
+                        <div className='flex items-center self-center'>
+                            <div className='flex flex-col border-x-2  justify-between rounded-lg  items-center'>
+
+
+                                <input type='submit'
+                                    className="flex self-center  justify-center 
+                                            rounded-md bg-green-00 px-3 py-1.5 text-sm/6 bg-blue-500  font-semibold text-white
+                                            shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 
+                                            focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+
+                                />
+
+                            </div>
 
                         </div>
 
 
 
+
                     </div>
+
 
 
                 </form>

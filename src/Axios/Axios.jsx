@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'https://10.21.96.245:8888/certificate/',
+    baseURL: 'https://10.21.98.141:8888/certificate/',
     headers: {
         'Content-Type': 'multipart/form-data'
     }
