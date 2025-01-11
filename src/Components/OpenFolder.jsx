@@ -2,28 +2,53 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import React, { useEffect, useState } from 'react';
 import { FcFolder, FcOpenedFolder } from "react-icons/fc";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Axios from '../Axios/Axios';
 import { Constant } from "../Utlis/Constants";
 
 
-
-const Starred = () => {
-
+const OpenFolder = () => {
     const [file, setFile] = useState([]);
+    const [filePath, setFilePath] = useState([]);
     const [fileName, setFileName] = useState('');
 
     const navigate = useNavigate();
+    let params = useParams()
 
-    const getData = () => {
+    const [paramID, setParamID] = useState(params.id)
+
+    useEffect(() => {
+
+        getOpenFolderData();
+
+
+    }, [paramID])
+
+
+
+
+
+
+
+
+
+
+    const addFolder = () => {
+
         Axios({
-            apiName: "list_star/",
-            method: "GET"
+            apiName: "create_folder/",
+            method: "POST",
+            dataObject: { id: paramID },
+            contentType: 'application/json'
         }).then((res) => {
-            setFile(s => s = res.data.data)
-        })
-    }
+            if (res.status == 200) {
+                getOpenFolderData();
 
+
+            }
+        })
+
+    }
     const deleteFolder = (id) => {
         Axios({
             apiName: "delete_folder/",
@@ -53,7 +78,10 @@ const Starred = () => {
     }
 
     const openFolder = (id) => {
+        setParamID(s => s = id)
         navigate("/downloads/folder/" + `${id}`)
+
+
 
 
 
@@ -74,6 +102,7 @@ const Starred = () => {
         document.body.removeChild(a);
 
     }
+
     const starredFolder = (id) => {
         Axios({
             apiName: "star/",
@@ -88,25 +117,36 @@ const Starred = () => {
 
 
 
-    useEffect(() => {
-        getData();
+    const getOpenFolderData = () => {
+        Axios({
+            apiName: "open_folder/",
+            method: "GET",
+            param: { id: paramID },
+
+        }).then((res) => {
+            if (res.status == 200) {
+                setFile(s => s = res.data.data)
 
 
-    }, [])
 
-
+            }
+        })
+    }
     return (
         <div className='w-5/6  h-full border-x-2 drop-shadow-md rounded-2xl'>
             <div className='flex justify-between py-3 px-6  mt-3'>
-                <div className='flex  font-bold text-xl ' >Starred</div>
-
+                <div className='flex  font-bold text-xl ' >All Files</div>
+                <button className='px-4 py-1 rounded-md  flex justify-between items-center   border'
+                    onClick={addFolder} >
+                    <FcFolder />&nbsp;Add
+                </button>
             </div>
             <div className='flex mt-3 flex-wrap w-full px-6 '>
                 {
                     file.map((item, index) =>
 
                         <div key={index} className='flex group   p-1 m-1 flex-col justify-between 
-                            rounded-lg  items-center w-40 min-h-32'>
+                                   rounded-lg  items-center w-40 min-h-32'>
 
 
                             <div className='flex justify-center items-center' >
@@ -116,10 +156,10 @@ const Starred = () => {
 
                                     </div> : <div onClick={() => openFolder(item.id)}>
                                         <FcFolder className='w-40  group-hover:hidden h-52 transition transform
-                                   hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none' />
+                                          hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none' />
 
                                         <FcOpenedFolder className='w-40 hidden group-hover:flex h-52 transition transform
-                                   hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none' />
+                                          hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none' />
                                     </div>
                                 }
 
@@ -142,15 +182,15 @@ const Starred = () => {
                                     <MenuItems
                                         transition
                                         className="absolute right-0 z-10 mt-2 w-50 origin-top-right rounded-md bg-white shadow-lg ring-1
-                                         ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 
-                                         data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                                                ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 
+                                                data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                                     >
                                         <div className="py-1">
                                             <MenuItem>
                                                 <a
                                                     onClick={() => deleteFolder(item.id)}
                                                     className="block px-4 py-2 text-sm text-gray-700
-                                                     data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                                                            data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
                                                 >
                                                     Delete
                                                 </a>
@@ -159,7 +199,7 @@ const Starred = () => {
                                                 <a
                                                     onClick={() => renameFolder(item.id)}
                                                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100
-                                                     data-[focus]:text-gray-900 data-[focus]:outline-none"
+                                                            data-[focus]:text-gray-900 data-[focus]:outline-none"
                                                 >
                                                     Rename
                                                 </a>
@@ -168,7 +208,7 @@ const Starred = () => {
                                                 <a
                                                     onClick={() => moveFolder(item.id)}
                                                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100
-                                                     data-[focus]:text-gray-900 data-[focus]:outline-none"
+                                                            data-[focus]:text-gray-900 data-[focus]:outline-none"
                                                 >
                                                     Move
                                                 </a>
@@ -177,7 +217,7 @@ const Starred = () => {
                                                 <a
                                                     onClick={() => starredFolder(item.id)}
                                                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100
-                                                                                                        data-[focus]:text-gray-900 data-[focus]:outline-none"
+                                                            data-[focus]:text-gray-900 data-[focus]:outline-none"
                                                 >
                                                     Star
                                                 </a>
@@ -202,4 +242,4 @@ const Starred = () => {
     )
 }
 
-export default Starred
+export default OpenFolder

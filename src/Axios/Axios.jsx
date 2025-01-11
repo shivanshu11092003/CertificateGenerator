@@ -1,20 +1,23 @@
 
 import axios from "axios";
+import { Constant } from "../Utlis/Constants";
 
 const instance = axios.create({
-    baseURL: 'https://10.21.98.141:8888/certificate/',
-    headers: {
-        'Content-Type': 'multipart/form-data'
-    }
+    baseURL: `https://${Constant.IP}/certificate/`,
+
 });
 
-const Axios = async (apiName, method, dataObject) => {
+const Axios = async (object) => {
 
     return await instance({
-        url: `${apiName}`,
-        method: `${method}`,
-        data: dataObject,
-        withCredentials: true
+        url: `${object.apiName}`,
+        method: `${object.method}`,
+        data: object.dataObject,
+        withCredentials: true,
+        headers: {
+            'Content-Type': `${object.contentType}`
+        },
+        params: object.param
 
     })
 }

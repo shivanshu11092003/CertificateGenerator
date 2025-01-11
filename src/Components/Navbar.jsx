@@ -10,7 +10,10 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     const logout = () => {
-        Axios("logout/", "GET").then((res) => {
+        Axios({
+            apiName: "logout/",
+            method: "GET"
+        }).then((res) => {
             if (res.status == 200) {
                 navigate(res.data.route);
             }

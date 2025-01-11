@@ -16,7 +16,10 @@ const Login = () => {
     })
 
     useEffect(() => {
-        Axios("login/", "GET").then((res) => {
+        Axios({
+            apiName: "login/",
+            method: "GET",
+        }).then((res) => {
             naviagte(res.data.route)
         })
 
@@ -30,7 +33,12 @@ const Login = () => {
 
     const SignIn = () => {
 
-        Axios("login/", "POST", form).then((res) => {
+        Axios({
+            apiName: "login/",
+            method: "POST",
+            dataObject: form,
+            contentType: 'multipart/form-data'
+        }).then((res) => {
             console.log(res)
             if (res.status == 200) {
                 naviagte("/" + res.data.route)

@@ -8,6 +8,8 @@ import InputBox from '../Components/InputBox';
 import Loader from '../Components/Loader';
 import Navbar from '../Components/Navbar';
 import { addID } from '../Redux/Slice';
+import { Constant } from "../Utlis/Constants";
+
 
 const Dashboard = () => {
     const input = useRef(null)
@@ -26,7 +28,7 @@ const Dashboard = () => {
     const form = useSelector(state => state.form.Form)
 
     useEffect(() => {
-        Axios("list/", "GET").then((res) => {
+        Axios({ apiName: "list/", method: "GET" }).then((res) => {
             if (res.status == 200) {
                 setAlign(s => s = res.data.details[0].Alignment)
                 setFont(s => s = res.data.details[1].Fonts)
@@ -155,12 +157,21 @@ const Dashboard = () => {
         formData.append("data", json)
         setIsLoading(s => s = true)
 
-        Axios("create/", "POST", formData).then((res) => {
+        Axios({
+            apiName: "create/",
+            method: "POST",
+            contentType: 'multipart/form-data',
+            dataObject: formData
+        }).then((res) => {
             setIsLoading(s => s = false)
-            window.open("https://10.21.96.245:8888/certificate" + res.data.zip_url + "/")
+            var a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            a.href = `https://${Constant.IP}/certificate` + res.data.zip_url + "/";
+            a.download = 'new';
+            a.click();
+            document.body.removeChild(a);
 
-
-            console.log("Call")
         }).catch((res) => {
             setIsLoading(s => s = false)
 
