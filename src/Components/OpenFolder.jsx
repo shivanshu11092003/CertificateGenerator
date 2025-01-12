@@ -2,20 +2,51 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import React, { useEffect, useState } from 'react';
 import { FcFolder, FcOpenedFolder } from "react-icons/fc";
 import { HiOutlineDotsVertical } from "react-icons/hi";
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Axios from '../Axios/Axios';
+import { copyIdReducer } from '../Redux/Slice';
 import { Constant } from "../Utlis/Constants";
+
 
 
 const OpenFolder = () => {
     const [file, setFile] = useState([]);
     const [filePath, setFilePath] = useState([]);
     const [fileName, setFileName] = useState('');
+    const [isLoading, setIsLoading] = useState(false)
+
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     let params = useParams()
 
     const [paramID, setParamID] = useState(params.id)
+    const copyId = useSelector(state => state.form.copyId);
+
+    const pasteFolder = (id) => {
+        console.log(copyId)
+        Axios({
+            apiName: "move_folder/",
+            method: "PUT",
+            dataObject: {
+                from: copyId,
+                to: id
+            }
+        }).then((res) => {
+            if (res.status == 200) {
+                getData();
+                setIsLoading(false)
+
+
+            }
+        })
+
+
+    }
+
+
+
 
     useEffect(() => {
 
@@ -24,17 +55,8 @@ const OpenFolder = () => {
 
     }, [paramID])
 
-
-
-
-
-
-
-
-
-
     const addFolder = () => {
-
+        setIsLoading(true)
         Axios({
             apiName: "create_folder/",
             method: "POST",
@@ -43,6 +65,7 @@ const OpenFolder = () => {
         }).then((res) => {
             if (res.status == 200) {
                 getOpenFolderData();
+                setIsLoading(false)
 
 
             }
@@ -50,6 +73,9 @@ const OpenFolder = () => {
 
     }
     const deleteFolder = (id) => {
+        setIsLoading(true)
+
+
         Axios({
             apiName: "delete_folder/",
             method: "PUT",
@@ -57,6 +83,7 @@ const OpenFolder = () => {
         }).then((res) => {
             if (res.status == 200) {
                 getData();
+                setIsLoading(false)
 
 
             }
@@ -64,12 +91,16 @@ const OpenFolder = () => {
 
     }
     const renameFolder = (id) => {
+        setIsLoading(true)
+
         Axios({
             apiName: "rename_folder/",
             method: "PUT",
             dataObject: { id: id, name: fileName }
         }).then((res) => {
             if (res.status == 200) {
+                setIsLoading(false)
+
 
 
             }
@@ -78,18 +109,21 @@ const OpenFolder = () => {
     }
 
     const openFolder = (id) => {
+        setIsLoading(true)
         setParamID(s => s = id)
         navigate("/downloads/folder/" + `${id}`)
+        setIsLoading(false)
 
 
-
+    }
+    const copyFolder = (id) => {
+        console.log(id)
+        dispatch(copyIdReducer(id))
 
 
     }
 
-    const moveFolder = () => {
 
-    }
 
     const openZIP = (name) => {
 
@@ -104,20 +138,32 @@ const OpenFolder = () => {
     }
 
     const starredFolder = (id) => {
+        setIsLoading(true)
+
         Axios({
             apiName: "star/",
             method: "PUT",
             dataObject: { id: id }
         }).then((res) => {
             if (res.status == 200) {
+                setIsLoading(false)
+
 
             }
         })
     }
 
+    const navigateToFolder = (id) => {
+        navigate("/downloads/folder/" + `${id}`)
+
+
+    }
+
 
 
     const getOpenFolderData = () => {
+        setIsLoading(true)
+
         Axios({
             apiName: "open_folder/",
             method: "GET",
@@ -126,21 +172,26 @@ const OpenFolder = () => {
         }).then((res) => {
             if (res.status == 200) {
                 setFile(s => s = res.data.data)
-
-
-
+                setFilePath(s => s = res.data.list)
+                setIsLoading(false)
             }
         })
     }
     return (
-        <div className='w-5/6  h-full border-x-2 drop-shadow-md rounded-2xl'>
+        <div className=' h-full border-x-2 w-full'>
             <div className='flex justify-between py-3 px-6  mt-3'>
-                <div className='flex  font-bold text-xl ' >All Files</div>
+                <div className='flex items-center py-2 rounded-lg border px-3'>home&nbsp;/&nbsp;{
+                    filePath.flatMap((item, index) => <div key={index} className='cursor-pointer'  >
+                        &nbsp;{item + " /"} New Folder /
+
+                    </div>)
+                }</div>
                 <button className='px-4 py-1 rounded-md  flex justify-between items-center   border'
                     onClick={addFolder} >
                     <FcFolder />&nbsp;Add
                 </button>
             </div>
+
             <div className='flex mt-3 flex-wrap w-full px-6 '>
                 {
                     file.map((item, index) =>
@@ -151,7 +202,7 @@ const OpenFolder = () => {
 
                             <div className='flex justify-center items-center' >
                                 {
-                                    item.type == 'zip' ? <div className='flex self-start' onClick={() => openZIP(item.name)}  >
+                                    item.type == 'zip' ? <div className='flex self-start' onClick={() => openZIP(item.url)}  >
                                         <img src="/src/assets/zip.png" className='self-baseline mt-12 w-[7rem] h-[7rem]' alt="" />
 
                                     </div> : <div onClick={() => openFolder(item.id)}>
@@ -204,15 +255,7 @@ const OpenFolder = () => {
                                                     Rename
                                                 </a>
                                             </MenuItem>
-                                            <MenuItem>
-                                                <a
-                                                    onClick={() => moveFolder(item.id)}
-                                                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100
-                                                            data-[focus]:text-gray-900 data-[focus]:outline-none"
-                                                >
-                                                    Move
-                                                </a>
-                                            </MenuItem>
+
                                             <MenuItem>
                                                 <a
                                                     onClick={() => starredFolder(item.id)}
@@ -220,6 +263,24 @@ const OpenFolder = () => {
                                                             data-[focus]:text-gray-900 data-[focus]:outline-none"
                                                 >
                                                     Star
+                                                </a>
+                                            </MenuItem>
+                                            <MenuItem>
+                                                <a
+                                                    onClick={() => copyFolder(item.id)}
+                                                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100
+                                                            data-[focus]:text-gray-900 data-[focus]:outline-none"
+                                                >
+                                                    Copy
+                                                </a>
+                                            </MenuItem>
+                                            <MenuItem>
+                                                <a
+                                                    onClick={() => pasteFolder(item.id)}
+                                                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100
+                                                            data-[focus]:text-gray-900 data-[focus]:outline-none"
+                                                >
+                                                    Paste
                                                 </a>
                                             </MenuItem>
 

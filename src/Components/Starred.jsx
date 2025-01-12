@@ -2,9 +2,11 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import React, { useEffect, useState } from 'react';
 import { FcFolder, FcOpenedFolder } from "react-icons/fc";
 import { HiOutlineDotsVertical } from "react-icons/hi";
+import { HiMiniStar } from "react-icons/hi2";
 import { useNavigate } from 'react-router-dom';
 import Axios from '../Axios/Axios';
 import { Constant } from "../Utlis/Constants";
+
 
 
 
@@ -59,9 +61,6 @@ const Starred = () => {
 
     }
 
-    const moveFolder = () => {
-
-    }
 
     const openZIP = (name) => {
 
@@ -96,7 +95,7 @@ const Starred = () => {
 
 
     return (
-        <div className='w-5/6  h-full border-x-2 drop-shadow-md rounded-2xl'>
+        <div className=' h-full border-x-2 w-full'>
             <div className='flex justify-between py-3 px-6  mt-3'>
                 <div className='flex  font-bold text-xl ' >Starred</div>
 
@@ -114,7 +113,8 @@ const Starred = () => {
                                     item.type == 'zip' ? <div className='flex self-start' onClick={() => openZIP(item.name)}  >
                                         <img src="/src/assets/zip.png" className='self-baseline mt-12 w-[7rem] h-[7rem]' alt="" />
 
-                                    </div> : <div onClick={() => openFolder(item.id)}>
+                                    </div> : <div className='relative' onClick={() => openFolder(item.id)}>
+                                        <div className='mt-7  flex text-yellow-500 self-start absolute'><HiMiniStar /></div>
                                         <FcFolder className='w-40  group-hover:hidden h-52 transition transform
                                    hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none' />
 
@@ -164,20 +164,12 @@ const Starred = () => {
                                                     Rename
                                                 </a>
                                             </MenuItem>
-                                            <MenuItem>
-                                                <a
-                                                    onClick={() => moveFolder(item.id)}
-                                                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100
-                                                     data-[focus]:text-gray-900 data-[focus]:outline-none"
-                                                >
-                                                    Move
-                                                </a>
-                                            </MenuItem>
+
                                             <MenuItem>
                                                 <a
                                                     onClick={() => starredFolder(item.id)}
                                                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100
-                                                                                                        data-[focus]:text-gray-900 data-[focus]:outline-none"
+                                                     data-[focus]:text-gray-900 data-[focus]:outline-none"
                                                 >
                                                     Star
                                                 </a>

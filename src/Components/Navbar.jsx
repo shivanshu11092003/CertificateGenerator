@@ -1,6 +1,6 @@
 import React from 'react';
 import { BsDownload } from "react-icons/bs";
-import { MdAccountCircle, MdLogout } from "react-icons/md";
+import { MdLogout } from "react-icons/md";
 import { RiDashboardHorizontalLine } from "react-icons/ri";
 import { useNavigate } from 'react-router-dom';
 import Axios from '../Axios/Axios';
@@ -15,7 +15,7 @@ const Navbar = () => {
             method: "GET"
         }).then((res) => {
             if (res.status == 200) {
-                navigate(res.data.route);
+                navigate("/" + res.data.route);
             }
         })
 
@@ -36,14 +36,12 @@ const Navbar = () => {
                 <div className='flex px-2'>
                     <div className='p-2 cursor-pointer hidden md:flex hover:drop-shadow-lg' onClick={(e) => navigate("/dashboard")}>Home</div>
                     <div className='p-2  md:hidden flex' onClick={(e) => navigate("/dashboard")}> <RiDashboardHorizontalLine /> </div>
-                    <div className='p-2 cursor-pointer hidden md:flex' onClick={(e) => navigate("/downloads/recent")}>Downloads</div>
-                    <div className='p-2  md:hidden flex' onClick={(e) => navigate("/downloads/recent")}><BsDownload /></div>
+                    <div className='p-2 cursor-pointer hidden md:flex' onClick={(e) => navigate("/downloads/allfiles")}>Downloads</div>
+                    <div className='p-2  md:hidden flex' onClick={(e) => navigate("/downloads/allfiles")}><BsDownload /></div>
 
                 </div>
                 <div className='flex items-center  p-2 text-sm md:text-lg'>
-                    <div className='md:flex hidden'><MdAccountCircle /></div>
-                    <div className='font-semibold p-1 px-2'>Shivanshu</div>
-                    <div className='px-3  ' onClick={logout}><MdLogout /></div>
+                    <div className='px-2 flex items-center text-base p-1 ' onClick={logout}>LogOut &nbsp;<MdLogout /></div>
                 </div>
             </div>
 

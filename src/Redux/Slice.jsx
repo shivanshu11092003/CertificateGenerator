@@ -6,6 +6,9 @@ const initialState = {
     },
     Loader: {
         "state": false
+    },
+    copyId: {
+        'id': 0
     }
 }
 
@@ -17,7 +20,11 @@ export const formSlice = createSlice({
             state.Form = action.payload
         },
         loader: (state, action) => {
-            state.Loader = !state.Loader
+            state.Loader = action.payload
+
+        },
+        copyIdReducer: (state, action) => {
+            state.copyId = action.payload
 
         }
     }
@@ -25,6 +32,6 @@ export const formSlice = createSlice({
 })
 
 
-export const { addID, loader } = formSlice.actions
+export const { addID, loader, copyIdReducer } = formSlice.actions
 
 export default formSlice.reducer

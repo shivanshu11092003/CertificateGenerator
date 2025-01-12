@@ -5,6 +5,7 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useNavigate } from 'react-router-dom';
 import Axios from '../Axios/Axios';
 import LoginInput from '../Components/LoginInput';
+import { Regex } from '../Utlis/Constants';
 
 
 
@@ -14,13 +15,16 @@ const Login = () => {
         email: '',
         password: ''
     })
+    const [error, setError] = useState("")
+    const [emailError, setEmailError] = useState("")
+    const [passwordError, setPasswordError] = useState("")
 
     useEffect(() => {
         Axios({
             apiName: "login/",
             method: "GET",
         }).then((res) => {
-            naviagte(res.data.route)
+            naviagte("/" + res.data.route)
         })
 
     }, [])
@@ -32,18 +36,40 @@ const Login = () => {
     }
 
     const SignIn = () => {
+        console.log(form.email, form.password)
+        if (form.email.match(Regex.emailRegex)) {
 
-        Axios({
-            apiName: "login/",
-            method: "POST",
-            dataObject: form,
-            contentType: 'multipart/form-data'
-        }).then((res) => {
-            console.log(res)
-            if (res.status == 200) {
-                naviagte("/" + res.data.route)
+            if (form.password.match(Regex.passwordRegex)) {
+
+                Axios({
+                    apiName: "login/",
+                    method: "POST",
+                    dataObject: form,
+                    contentType: 'multipart/form-data'
+                }).then((res) => {
+                    console.log(res)
+                    if (res.status == 200) {
+                        naviagte("/" + res.data.route)
+                    }
+
+                }).catch((res) => {
+                    if (res.status == 401) {
+                        console.log(res.response.data.error)
+                        setError((s) => s = res.response.data.error)
+
+                    }
+                })
+
+            } else {
+                setPasswordError((s) => s = "must contain 8 character,special character,alphabet and number")
             }
-        })
+            setEmailError((s) => s = "")
+
+        } else {
+            setEmailError((s) => s = "Put email in valid format")
+        }
+
+
     }
 
     return (
@@ -68,8 +94,13 @@ const Login = () => {
                     <div className='flex p-4 text-4xl text-white font-semibold'>Sign In</div>
 
                     <LoginInput key={1} name="email" placeholder="example@mail.com" value={form.email} handleChange={handleChange} children={<MdOutlineMail />} />
+                    <div className="text-yellow-200 text-sm text-start w-full px-4">{emailError}</div>
+
 
                     <LoginInput key={2} name="password" placeholder="******" value={form.password} handleChange={handleChange} children={<MdPassword />} />
+                    <div className="text-yellow-200 text-sm text-start w-full px-4 ">{passwordError}</div>
+                    <div className="flex text-yellow-200 self-center text-sm ps-5 text-start w-full px-4 pb-3">{error}</div>
+
 
                     <button
                         onClick={SignIn}

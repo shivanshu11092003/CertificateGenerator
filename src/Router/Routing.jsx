@@ -7,7 +7,6 @@ import {
 import AllFiles from "../Components/AllFiles";
 import Deleted from "../Components/Deleted";
 import OpenFolder from "../Components/OpenFolder";
-import Recent from "../Components/Recent";
 import Starred from "../Components/Starred";
 import Dashboard from "../Screen/Dashboard";
 import Downloads from "../Screen/Downloads";
@@ -22,7 +21,7 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="downloads" element={<Downloads />}>
             <Route path="allfiles" element={<AllFiles />} />
             <Route path="folder/:id" element={<OpenFolder />} />
-            <Route path="recent" element={<Recent />} />
+
             <Route path="starred" element={<Starred />} />
             <Route path="deleted" element={<Deleted />} />
         </Route>

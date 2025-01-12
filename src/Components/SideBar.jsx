@@ -18,7 +18,7 @@ const SideBar = () => {
     const Navigate = (route) => navigate(route)
 
     return (
-        <div className='w-[20rem] '>
+        <div className='md:w-[17rem] w-1/3 '>
 
             <div className='md:flex border-2 mt-2  drop-shadow-lg py-3 px-3 rounded-md  m-2 font-bold  hidden'>My Folder</div>
 
@@ -32,7 +32,7 @@ const SideBar = () => {
                 >
                     <div className='text-blue-500 hidden group-hover:flex'> <FaFolderOpen /> </div>
                     <div className='text-slate-800 flex group-hover:hidden'> <FaFolder /> </div>
-                    <div className='px-4 text-gray-700 group-hover:text-blue-500 hidden md:flex text-lg '>All Files</div>
+                    <div className='px-4 text-gray-700 group-hover:text-blue-500 hidden md:flex text-base font-semibold '>All Files</div>
                 </div>
 
                 <div className='flex group items-center justify-center md:justify-start  py-4 px-3  text-lg mt-1 m-2
@@ -43,7 +43,7 @@ const SideBar = () => {
                 >
                     <div className='text-blue-500 hidden group-hover:flex'> <TiStarFullOutline /> </div>
                     <div className='text-yellow-500 flex group-hover:hidden'> <CiStar /> </div>
-                    <div className='px-4 text-gray-700  group-hover:text-blue-500 hidden md:flex text-lg '>Starred </div>
+                    <div className='px-4 text-gray-700  group-hover:text-blue-500 hidden md:flex text-base font-semibold'>Starred </div>
                 </div>
 
                 <div className='flex group  items-center justify-center md:justify-start  py-4 px-3  text-lg mt-1 m-2
@@ -54,7 +54,7 @@ const SideBar = () => {
                 >
                     <div className='text-blue-500 hidden group-hover:flex'> <MdFolderDelete /> </div>
                     <div className='text-red-500 flex group-hover:hidden'> <MdOutlineFolderDelete /> </div>
-                    <div className='px-4 text-gray-700 group-hover:text-blue-500  hidden md:flex text-lg '>Deleted</div>
+                    <div className='px-4 text-gray-700 group-hover:text-blue-500  hidden md:flex text-base font-semibold'>Trash</div>
                 </div>
 
             </div>

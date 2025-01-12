@@ -5,7 +5,6 @@ import formReducer from './Slice'
 export default configureStore({
     reducer: {
         form: formReducer,
-        loader: formReducer
     }
 
 })

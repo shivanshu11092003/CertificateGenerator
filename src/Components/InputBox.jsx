@@ -2,16 +2,16 @@ import React from 'react'
 
 const InputBox = ({ id, keyName, handleChange, alignment, alignArray }) => {
     return (
-        <div key={id} className='flex mt-3  justify-center  flex-col border rounded-lg m-1 px-1 w-auto' >
+        <div key={id} className='flex mt-3  justify-center  flex-col  rounded-lg m-1 px-1 ' >
 
-            <div className='flex flex-col lg:flex-row   items-center'>
+            <div className='flex flex-col lg:flex-row w-full  items-center'>
 
-                <div className="flex m-1 items-center justify-center w-full rounded-md
+                <div className="flex m-1 items-center justify-center  rounded-md p-2
                    outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline 
                   has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 
                   has-[input:focus-within]:outline-orange-300 sm:text-sm/6">
 
-                    <p className=" flex text-black self-start px-2 mt-3 ">Field</p>
+                    Field:
 
                     <input
                         id={id}
@@ -19,7 +19,7 @@ const InputBox = ({ id, keyName, handleChange, alignment, alignArray }) => {
                         placeholder="Enter key name"
                         value={keyName}
                         onChange={handleChange}
-                        className="block grow py-1.5 pl-1 pr-3  text-gray-900
+                        className="block  w-full py-1 pl-1 pr-3  text-gray-900
                          placeholder:text-gray-400 focus:outline focus:outline-0 "
 
                     />
