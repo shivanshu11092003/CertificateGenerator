@@ -21,7 +21,11 @@ const Dashboard = () => {
     const [json, setJson] = useState('')
     const [font, setFont] = useState([])
     const [align, setAlign] = useState([])
+    const [imgPreview, setImgPreview] = useState('')
+    const [imgDownload, setImgDownload] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+
+
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -146,12 +150,7 @@ const Dashboard = () => {
     const SubmitForm = (e) => {
         e.preventDefault()
 
-        const data = [
-            { name: "Shivanshu" },
-            { name: "Nandini" },
-            { name: "Prince" },
-            { name: "Suhani" }
-        ]
+
         const formData = new FormData(e.currentTarget);
         formData.append("location", JSON.stringify(field))
         console.log(json)
@@ -165,13 +164,10 @@ const Dashboard = () => {
             dataObject: formData
         }).then((res) => {
             setIsLoading(s => s = false)
-            var a = document.createElement("a");
-            document.body.appendChild(a);
-            a.style = "display: none";
-            a.href = `https://${Constant.IP}/certificate` + res.data.zip_url + "/";
-            a.download = 'new';
-            a.click();
-            document.body.removeChild(a);
+
+            setImgPreview(s => s = res.data.preview)
+            setImgDownload(s => s = res.data.zip_url)
+
             e.reset()
 
 
@@ -182,6 +178,23 @@ const Dashboard = () => {
 
         })
 
+
+
+    }
+
+    const imgDownloadFun = () => {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = `https://${Constant.IP}/certificate` + imgDownload + "/";
+        a.download = 'new';
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    const openPreview = () => {
+        const newWindow = window.open(`https://${Constant.IP}/certificate` + imgPreview + "/", '_blank', 'noopener,noreferrer')
+        if (newWindow) newWindow.opener = null
 
 
     }
@@ -220,16 +233,34 @@ const Dashboard = () => {
                                 {
                                     areaSelector.length ?
                                         areaSelector.map((item, index) => <Rnd
-                                            className='flex   justify-between  items-center h-10  z-10  border border-blue-600 absolute bg-red-400'
+                                            className=' border border-blue-600 absolute bg-red-400'
                                             key={index}
-                                            position={{ x: item.left + 10, y: item.top + 10 }}
+                                            position={{ x: item.left, y: item.top }}
+                                            onDragStop={(e, d) => {
+                                                const newUpdate = areaSelector.map((nestedItem) => nestedItem.id == item.id ?
+                                                    { ...item, left: d.x, top: d.y } : item)
+                                                setAreaSelector(newUpdate)
+                                            }}
+                                            onResize={(e, direction, ref, delta, position) => {
+                                                const newUpdate = areaSelector.map((nestedItem) => nestedItem.id == item.id ?
+                                                    {
+                                                        ...item, width: ref.offsetWidth,
+                                                        height: ref.offsetHeight,
+                                                    } : item)
+                                                setAreaSelector(newUpdate)
+
+                                            }}
+
+
 
                                             size={{ width: item.width, height: item.height }}
                                         >
 
-                                            <div className='flex text-base w-full justify-center'>{field[index].keyName}</div>
+                                            <div className='flex  justify-between  items-center h-10  z-10 '>
+                                                <div className='flex text-base w-full justify-center'>{field[index].keyName}</div>
 
-                                            <div className='flex  w-4 self-start' onClick={(e) => delAreaSelector(item.id)}><MdCancel /></div>
+                                                <div className='flex  w-4 self-start' onClick={(e) => delAreaSelector(item.id)}><MdCancel /></div>
+                                            </div>
 
 
                                         </Rnd>
@@ -332,7 +363,19 @@ const Dashboard = () => {
                                 </div>
 
                             </div>
+                            <div className='flex justify-center mt-5'>
+                                {
+                                    imgPreview != '' ? <button className='ps-8 text-blue-600 hover:text-red-600' onClick={openPreview}>Preview</button> : <></>
+
+                                }
+                                {
+                                    imgDownload != '' ? <button className='ps-8 text-blue-600 hover:text-red-600' onClick={imgDownloadFun}>Download</button> : <></>
+
+                                }
+                            </div>
                         </div>
+
+
 
                         <div className='flex items-center mt-4 self-center'>
 
@@ -344,6 +387,11 @@ const Dashboard = () => {
                                             focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
                             />
+
+
+
+
+
 
 
                         </div>

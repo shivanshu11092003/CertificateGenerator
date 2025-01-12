@@ -1,11 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     Form: {
         "id": 0
     },
     Loader: {
-        "state": false
+        "state": 0
     },
     copyId: {
         'id': 0
@@ -19,8 +19,12 @@ export const formSlice = createSlice({
         addID: (state, action) => {
             state.Form = action.payload
         },
-        loader: (state, action) => {
-            state.Loader = action.payload
+        loaderAdd: (state) => {
+            state.Loader++;
+
+        },
+        loaderMinus: (state) => {
+            state.Loader--;
 
         },
         copyIdReducer: (state, action) => {
@@ -32,6 +36,6 @@ export const formSlice = createSlice({
 })
 
 
-export const { addID, loader, copyIdReducer } = formSlice.actions
+export const { addID, loaderAdd, loaderMinus, copyIdReducer } = formSlice.actions
 
 export default formSlice.reducer

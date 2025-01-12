@@ -969,6 +969,14 @@ video {
   padding-inline-start: 1.25rem;
 }
 
+.ps-4 {
+  padding-inline-start: 1rem;
+}
+
+.ps-8 {
+  padding-inline-start: 2rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -1096,6 +1104,11 @@ video {
 .text-yellow-500 {
   --tw-text-opacity: 1;
   color: rgb(234 179 8 / var(--tw-text-opacity, 1));
+}
+
+.text-blue-600 {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity, 1));
 }
 
 .shadow-lg {
