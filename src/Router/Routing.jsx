@@ -17,7 +17,9 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<Root />}>
 
         <Route path="login" element={<Login />} />
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard" element={
+            <Dashboard />
+        } />
         <Route path="downloads" element={<Downloads />}>
             <Route path="allfiles" element={<AllFiles />} />
             <Route path="folder/:id" element={<OpenFolder />} />

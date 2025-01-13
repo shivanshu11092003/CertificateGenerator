@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const InputBox = ({ id, keyName, handleChange, alignment, alignArray }) => {
+const InputBox = ({ id, keyName, handleChange, alignment, alignArray, type }) => {
+    const fieldType = ["String", "Image"]
+
+    const [imageAdder, setImageAdder] = useState([])
+
+    const onDropdownSelected = (e) => {
+        alignment(id, e.target.value, "fieldType")
+
+    }
     return (
-        <div key={id} className='flex mt-3  justify-center  flex-col  rounded-lg m-1 px-1 ' >
+        <div key={id} className='flex items-center  justify-center  flex-col  rounded-lg m-1 px-1 ' >
 
             <div className='flex flex-col lg:flex-row w-full  items-center'>
 
@@ -32,7 +40,7 @@ const InputBox = ({ id, keyName, handleChange, alignment, alignArray }) => {
                                         focus-visible:outline-offset-2 focus-visible:outline-white
                                         bg-white border hover:file:bg-violet-100  
                                         *:italic'
-                    onChange={e => alignment(id, e.target.value)} >
+                    onChange={e => alignment(id, e.target.value, "alignment")} >
                     <option value="">Alignment</option>
                     {
                         alignArray.length ?
@@ -44,7 +52,45 @@ const InputBox = ({ id, keyName, handleChange, alignment, alignArray }) => {
 
 
                 </select>
+                <select id="font" className='flex self-center mt-3 justify-center rounded-md m-2  px-1 py-3 text-sm/6
+                                        font-semibold text-black focus-visible:outline focus-visible:outline-2
+                                        focus-visible:outline-offset-2 focus-visible:outline-white
+                                        bg-white border hover:file:bg-violet-100  
+                                        *:italic'
+                    onChange={e => onDropdownSelected(e)} >
+                    <option value="">Field Type</option>
+                    {
+                        fieldType.length ?
+                            fieldType.map((item, index) =>
+                                <option key={index} value={item}>{item}</option>
+                            ) : <option value="">Please wait</option>
 
+                    }
+
+
+
+
+                </select>
+
+
+            </div>
+
+            <div>
+                {
+                    type == "Image" ? <input
+                        name={keyName}
+                        type="file"
+                        placeholder="Enter key name"
+                        className="flex self-center  justify-center rounded-md  px-1 py-1.5 text-sm/6  font-semibold text-black focus-visible:outline
+                        focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 file:mr-4 file:py-2 
+                        file:px-4 file:rounded-full file:border-0 file:text-sm 
+                        file:font-semibold file:bg-blue-50 file:text-violet-500
+                        hover:file:bg-violet-100"
+                        accept="image/png, image/jpg, image/jpeg"
+
+
+                    /> : <></>
+                }
             </div>
 
 

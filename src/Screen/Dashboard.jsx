@@ -41,6 +41,14 @@ const Dashboard = () => {
         })
     }, [])
 
+    const removeTemplate = () => {
+        setPImg(s => s = false)
+        setField(s => s = [])
+
+
+    }
+
+
 
     const selectImage = () => {
         if (!pImg) {
@@ -57,13 +65,13 @@ const Dashboard = () => {
         setField(oldArray)
     }
 
-    const alignment = (id, value) => {
+    const alignment = (id, value, keyName) => {
         console.log(id, value)
         setField(field.map((item) => {
             if (item.id == id) {
                 const update = {
                     ...item,
-                    alignment: value,
+                    [keyName]: value,
                 }
 
                 return update;
@@ -147,6 +155,7 @@ const Dashboard = () => {
 
 
 
+
     const SubmitForm = (e) => {
         e.preventDefault()
 
@@ -221,7 +230,7 @@ const Dashboard = () => {
 
 
                             </div> : <div className="flex relative flex-col h-max w-4/5 z-0 ">
-                                <div className='flex self-end z-0 hover:text-red-600 ' onClick={(e) => setPImg(false)}><MdCancel /></div>
+                                <div className='flex self-end z-0 hover:text-red-600 ' onClick={(e) => removeTemplate()}><MdCancel /></div>
 
                                 <div className='w-2/3 h-full'>
                                     <img src={images} alt="" onMouseDown={imgCoordinates} className='cursor-crosshair drop-shadow-md z-0  ' />
@@ -236,20 +245,20 @@ const Dashboard = () => {
                                             className=' border border-blue-600 absolute bg-red-400'
                                             key={index}
                                             position={{ x: item.left, y: item.top }}
-                                            onDragStop={(e, d) => {
-                                                const newUpdate = areaSelector.map((nestedItem) => nestedItem.id == item.id ?
-                                                    { ...item, left: d.x, top: d.y } : item)
-                                                setAreaSelector(newUpdate)
-                                            }}
-                                            onResize={(e, direction, ref, delta, position) => {
-                                                const newUpdate = areaSelector.map((nestedItem) => nestedItem.id == item.id ?
-                                                    {
-                                                        ...item, width: ref.offsetWidth,
-                                                        height: ref.offsetHeight,
-                                                    } : item)
-                                                setAreaSelector(newUpdate)
+                                            // onDragStop={(e, d) => {
+                                            //     const newUpdate = areaSelector.map((nestedItem) => nestedItem.id == item.id ?
+                                            //         { ...item, left: d.x, top: d.y } : item)
+                                            //     setAreaSelector(newUpdate)
+                                            // }}
+                                            // onResize={(e, direction, ref, delta, position) => {
+                                            //     const newUpdate = areaSelector.map((nestedItem) => nestedItem.id == item.id ?
+                                            //         {
+                                            //             ...item, width: ref.offsetWidth,
+                                            //             height: ref.offsetHeight,
+                                            //         } : item)
+                                            //     setAreaSelector(newUpdate)
 
-                                            }}
+                                            // }}
 
 
 
@@ -304,14 +313,14 @@ const Dashboard = () => {
 
 
                             </div>
-                            <div className='flex flex-col w-full overflow-y-auto border items-center '>
+                            <div className='flex flex-col  overflow-y-auto border m-1 rounded-md items-center '>
 
 
                                 {
                                     field.map((item, index) =>
 
                                         <InputBox key={index} id={item.id} keyName={item.keyName} handleChange={handleChange}
-                                            alignment={alignment} alignArray={align}
+                                            alignment={alignment} alignArray={align} type={item.fieldType}
                                         />
 
                                     )
@@ -322,7 +331,7 @@ const Dashboard = () => {
 
 
 
-                            <div className='flex  flex-row border-y rounded-lg p-1'>
+                            <div className='flex m-1  flex-row border rounded-md p-1'>
 
                                 <div className='flex items-center justify-between' >
                                     <input type="file"
@@ -387,12 +396,6 @@ const Dashboard = () => {
                                             focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
                             />
-
-
-
-
-
-
 
                         </div>
 
