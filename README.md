@@ -1,8 +1,32 @@
-# React + Vite
+Certificate Generation Tool
+Overview
+This tool allows users to generate multiple certificates using a single template and an Excel/CSV file. Designed for flexibility and ease of use, it includes an intuitive drag-and-drop interface for positioning certificate fields and a robust file management system similar to cloud drives.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Features
+🧾 Certificate Generator
+Template-based bulk generation
+Import an Excel or CSV file and apply a template to generate certificates in batch.
 
-Currently, two official plugins are available:
+Interactive key placement system
+Precisely position dynamic elements like Name, Signature, Date, and Course Title using mouse events.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Built from scratch
+Custom-built rendering and positioning logic to allow seamless customization.
+
+☁️ File Management System
+Cloud-drive like UI
+Organize certificates and templates in folders.
+
+Folder operations
+Create, move, rename, and delete folders and files.
+
+Trash system
+Deleted items go to Trash, and can be restored or permanently cleared.
+
+🔐 Authentication & Payment
+User authentication
+Secure login and registration system.
+
+Subscription or pay-per-use model
+Integrated payment gateway for premium features or certificate credits.
+
